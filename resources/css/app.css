@@ -4,6 +4,42 @@
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --color-forest-950: #102c26;
+    --color-forest-900: #173d32;
+    --color-forest-700: #38664d;
+    --color-forest-100: #eaf0e7;
+    --color-paper: #fafbf7;
+    --color-ember: #e98445;
+}
+
+@layer base {
+    html { scroll-behavior: smooth; scroll-padding-top: 7rem; }
+    body { @apply bg-paper font-sans text-forest-950 antialiased; }
+    button, summary, a { -webkit-tap-highlight-color: transparent; }
+    button, summary { cursor: pointer; }
+    :focus-visible { outline: 3px solid #b75420; outline-offset: 5px; }
+    ::selection { background: #d9e7c8; color: #102c26; }
+    summary::-webkit-details-marker { display: none; }
+    summary { list-style: none; }
+}
+
+@layer components {
+    .container-page { @apply mx-auto w-full max-w-[1280px] px-6 sm:px-10 lg:px-14; }
+    .btn { @apply inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 py-3 text-sm font-semibold transition duration-200; }
+    .btn-primary { @apply bg-forest-900 text-white hover:bg-forest-700; }
+    .btn-light { @apply bg-white text-forest-950 hover:bg-forest-100; }
+    .btn-outline { @apply border border-forest-900/20 hover:border-forest-900 hover:bg-forest-100; }
+    .eyebrow { @apply mb-5 flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.19em] text-forest-700; }
+    .section-title { @apply text-3xl leading-[1.16] font-medium tracking-[-0.045em] sm:text-4xl lg:text-[46px]; }
+    .muted { @apply text-sm leading-7 text-forest-950/65; }
+    .nav-link { @apply rounded-full px-4 py-2.5 text-sm text-forest-950/65 transition hover:bg-forest-100 hover:text-forest-950; }
+    .nav-link[aria-current='page'] { @apply bg-forest-100 text-forest-900 font-semibold; }
+    .faq-plus { @apply transition-transform duration-200; }
+    details[open] .faq-plus { transform: rotate(45deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
 }
