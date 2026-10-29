@@ -30,3 +30,21 @@ if (menuButton && mobileMenu) {
         if (event.matches) closeMenu();
     });
 }
+
+const reportChecklist = document.querySelector('[data-report-checklist]');
+if (reportChecklist) {
+    const checkboxes = [...reportChecklist.querySelectorAll('input[type="checkbox"]')];
+    const progress = document.querySelector('[data-checklist-progress]');
+    const progressBar = document.querySelector('[data-checklist-bar]');
+    const updateChecklist = () => {
+        const completed = checkboxes.filter((checkbox) => checkbox.checked).length;
+        progress.textContent = `${completed} dari ${checkboxes.length} persiapan ditandai`;
+        progressBar.style.width = `${(completed / checkboxes.length) * 100}%`;
+    };
+    reportChecklist.addEventListener('change', updateChecklist);
+    document.querySelector('[data-checklist-reset]').addEventListener('click', () => {
+        checkboxes.forEach((checkbox) => { checkbox.checked = false; });
+        updateChecklist();
+    });
+    updateChecklist();
+}

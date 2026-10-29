@@ -5,7 +5,7 @@
                 <p class="eyebrow"><span class="size-1.5 rounded-full bg-forest-700"></span> Bersama menjaga ruang hidup</p>
                 <h1 class="max-w-xl text-[clamp(3rem,6vw,5.2rem)] leading-[1.05] font-medium tracking-[-0.065em]">Hutan terjaga.<br>Kepedulian<br><span class="text-forest-700">jadi tindakan.</span></h1>
                 <p class="mt-7 max-w-md text-base leading-8 text-forest-950/65">Lihat indikasi kebakaran hutan atau lahan? Sampaikan informasi dari sekitar Anda, bantu relawan meninjau, dan ikuti perkembangannya.</p>
-                <div class="mt-8 flex flex-wrap gap-3"><a href="#mulai" class="btn btn-primary">Mulai dari laporan Anda <x-icon class="size-4" /></a><a href="#cara-kerja" class="btn btn-outline">Pelajari caranya</a></div>
+                <div class="mt-8 flex flex-wrap gap-3"><a href="{{ route('access') }}" class="btn btn-primary">Mulai dari laporan Anda <x-icon class="size-4" /></a><a href="#cara-kerja" class="btn btn-outline">Pelajari caranya</a></div>
                 <div class="mt-10 flex items-center gap-3 border-t border-forest-900/10 pt-6 text-xs leading-5 text-forest-950/60"><x-icon name="shield" class="size-8 text-forest-700" /><p>Informasi yang terarah.<br><span class="font-medium text-forest-950">Kepedulian yang saling terhubung.</span></p></div>
             </div>
             <div class="relative min-h-[470px] overflow-hidden rounded-[28px] bg-forest-900 lg:min-h-[620px]">
@@ -48,7 +48,7 @@
     </section>
 
     <section class="container-page grid gap-10 py-20 lg:grid-cols-2 lg:items-center lg:gap-20">
-        <div><p class="eyebrow">03 / Sebelum melapor</p><h2 class="section-title">Informasi yang baik<br>dimulai dari persiapan.</h2><p class="muted mt-5 max-w-md">Utamakan keselamatan. Catat apa yang dapat diamati tanpa mendekati area berbahaya.</p><a href="#mulai" class="btn btn-outline mt-7">Siapkan laporan Anda <x-icon class="size-4" /></a></div>
+        <div><p class="eyebrow">03 / Sebelum melapor</p><h2 class="section-title">Informasi yang baik<br>dimulai dari persiapan.</h2><p class="muted mt-5 max-w-md">Utamakan keselamatan. Catat apa yang dapat diamati tanpa mendekati area berbahaya.</p><a href="{{ route('guide') }}" class="btn btn-outline mt-7">Siapkan laporan Anda <x-icon class="size-4" /></a></div>
         <div class="rounded-3xl bg-[#f0f2e9] p-7 sm:p-9">
             @foreach([['pin', 'Di mana lokasinya?', 'Siapkan wilayah, petunjuk lokasi, dan koordinat.'], ['clock', 'Kapan dan apa yang terlihat?', 'Catat waktu pengamatan dan jelaskan kondisi.'], ['camera', 'Ada bukti pendukung?', 'Satu JPG, PNG, atau PDF, maksimal 2 MB.']] as [$icon, $heading, $text])
                 <div class="flex gap-4 py-4 first:pt-0 last:pb-0"><span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-forest-700"><x-icon :name="$icon" /></span><div><h3 class="text-sm font-semibold">{{ $heading }}</h3><p class="mt-1 text-xs leading-6 text-forest-950/65">{{ $text }}</p></div></div>
@@ -73,7 +73,7 @@
     <section id="mulai" class="container-page pb-20">
         <div class="relative overflow-hidden rounded-[28px] bg-[#e5ecd9] p-8 sm:p-12 lg:p-14">
             <x-icon name="leaf" class="pointer-events-none absolute -right-8 -bottom-16 size-72 rotate-[-25deg] text-forest-700/8" />
-            <div class="relative max-w-2xl"><p class="eyebrow">Langkah kecil, kepedulian besar</p><h2 class="section-title">Mulai dari yang Anda lihat.<br>Bantu hutan tetap terjaga.</h2><p class="muted mt-5 max-w-lg">Kenali informasi yang perlu disiapkan sebelum membuat laporan. Fitur pengiriman laporan sedang dikembangkan.</p><a href="#cara-kerja" class="btn btn-primary mt-7">Lihat alur pelaporan <x-icon class="size-4" /></a></div>
+            <div class="relative max-w-2xl"><p class="eyebrow">Langkah kecil, kepedulian besar</p><h2 class="section-title">Mulai dari yang Anda lihat.<br>Bantu hutan tetap terjaga.</h2><p class="muted mt-5 max-w-lg">Kenali informasi yang perlu disiapkan sebelum membuat laporan. Fitur pengiriman laporan sedang dikembangkan.</p><a href="{{ route('guide') }}" class="btn btn-primary mt-7">Baca panduan pelaporan <x-icon class="size-4" /></a></div>
         </div>
     </section>
 </x-layouts.public>

@@ -21,20 +21,20 @@
             </a>
             <nav aria-label="Navigasi utama" class="hidden items-center gap-1 md:flex">
                 <a class="nav-link" href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Beranda</a>
-                <a class="nav-link" href="{{ route('home') }}#cara-kerja">Cara kerja</a>
-                <a class="nav-link" href="{{ route('home') }}#tentang">Tentang kami</a>
+                <a class="nav-link" href="{{ route('guide') }}" @if(request()->routeIs('guide')) aria-current="page" @endif>Panduan</a>
+                <a class="nav-link" href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>Tentang kami</a>
                 <a class="nav-link" href="{{ route('home') }}#pertanyaan">FAQ</a>
             </nav>
-            <a href="{{ route('home') }}#mulai" class="btn btn-primary hidden sm:inline-flex">Mulai melapor <x-icon class="size-4" /></a>
+            <a href="{{ route('access') }}" class="btn btn-primary hidden sm:inline-flex">Masuk <x-icon class="size-4" /></a>
             <button type="button" data-menu-toggle aria-expanded="false" aria-controls="menu-mobile" aria-label="Buka menu navigasi" class="flex size-11 items-center justify-center rounded-full border border-forest-900/15 md:hidden"><x-icon name="menu" /></button>
         </div>
         <nav id="menu-mobile" data-mobile-menu hidden aria-label="Navigasi seluler" class="container-page border-t border-forest-900/10 py-4 md:hidden">
             <div class="flex flex-col gap-1">
                 <a class="nav-link" href="{{ route('home') }}">Beranda</a>
-                <a class="nav-link" href="{{ route('home') }}#cara-kerja">Cara kerja</a>
-                <a class="nav-link" href="{{ route('home') }}#tentang">Tentang kami</a>
+                <a class="nav-link" href="{{ route('guide') }}" @if(request()->routeIs('guide')) aria-current="page" @endif>Panduan</a>
+                <a class="nav-link" href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>Tentang kami</a>
                 <a class="nav-link" href="{{ route('home') }}#pertanyaan">FAQ</a>
-                <a class="btn btn-primary mt-3" href="{{ route('home') }}#mulai">Mulai melapor <x-icon /></a>
+                <a class="btn btn-primary mt-3" href="{{ route('access') }}">Masuk <x-icon /></a>
             </div>
         </nav>
     </header>
@@ -46,7 +46,7 @@
                 <p class="muted mt-4">Ruang kepedulian bersama untuk hutan dan lahan yang lebih terjaga.</p>
             </div>
             <div class="flex flex-wrap gap-14 text-sm">
-                <div><p class="mb-4 font-semibold">Jelajahi</p><div class="flex flex-col gap-3 text-forest-950/65"><a href="{{ route('home') }}#cara-kerja" class="hover:underline">Cara kerja</a><a href="{{ route('home') }}#tentang" class="hover:underline">Tentang Karhutla</a><a href="{{ route('home') }}#pertanyaan" class="hover:underline">Pertanyaan umum</a></div></div>
+                <div><p class="mb-4 font-semibold">Jelajahi</p><div class="flex flex-col gap-3 text-forest-950/65"><a href="{{ route('guide') }}" class="hover:underline">Panduan</a><a href="{{ route('about') }}" class="hover:underline">Tentang Karhutla</a><a href="{{ route('home') }}#pertanyaan" class="hover:underline">Pertanyaan umum</a></div></div>
                 <div class="max-w-52"><p class="mb-4 font-semibold">Tentang platform</p><p class="text-xs leading-6 text-forest-950/60">Proyek komunitas pelaporan dan pemantauan informasi. Bukan layanan tanggap darurat.</p></div>
             </div>
         </div>
