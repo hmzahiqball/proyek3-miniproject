@@ -1,12 +1,28 @@
-<x-layouts.public title="Akses akun" description="Pratinjau akses akun Karhutla untuk pelapor, relawan pemantau, dan koordinator.">
-    <section class="container-page py-12 lg:py-18">
-        <div class="grid overflow-hidden rounded-[28px] border border-forest-900/10 bg-white lg:grid-cols-2">
-            <div class="relative overflow-hidden bg-forest-900 p-8 text-white sm:p-12 lg:p-14"><img src="{{ asset('images/forest-landscape.svg') }}" alt="" class="absolute inset-0 size-full object-cover opacity-25" width="700" height="800"><div class="relative"><p class="eyebrow text-[#bbd2b7]">Satu ruang kepedulian</p><h1 class="section-title !text-4xl sm:!text-5xl">Selamat datang<br>di Karhutla.</h1><p class="mt-6 max-w-sm text-sm leading-8 text-white/75">Mulai laporan, tinjau informasi, dan ikuti perkembangannya sesuai peran Anda.</p><div class="mt-12 space-y-5">@foreach([['file', 'Pelapor', 'Sampaikan pengamatan dari sekitar Anda.'], ['eye', 'Relawan Pemantau', 'Bantu meninjau informasi laporan.'], ['users', 'Koordinator Relawan', 'Hubungkan informasi dengan tindak lanjut.']] as [$icon, $heading, $text])<div class="flex gap-4"><x-icon :name="$icon" class="mt-1 text-[#bbd2b7]" /><div><p class="text-sm font-medium">{{ $heading }}</p><p class="mt-1 text-xs leading-6 text-white/60">{{ $text }}</p></div></div>@endforeach</div></div></div>
-            <div class="p-7 sm:p-12 lg:p-14"><span class="inline-flex rounded-full bg-forest-100 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-forest-700">Pratinjau antarmuka</span><h2 class="mt-6 text-3xl font-medium tracking-tight">Masuk ke akun Anda</h2><p class="muted mt-3">Akses pelaporan akan tersedia pada tahap pengembangan berikutnya.</p>
-                <div class="mt-7 flex gap-3 rounded-xl bg-[#fff4e8] p-4 text-xs leading-6 text-[#86451f]"><x-icon name="info" class="mt-0.5 size-4" /><p>Formulir ini hanya contoh tampilan. Login belum aktif. Jangan gunakan kredensial pribadi.</p></div>
-                <fieldset disabled class="mt-7 space-y-5" aria-describedby="access-note"><legend class="sr-only">Pratinjau formulir masuk yang belum aktif</legend><div><label for="email" class="mb-2 block text-sm font-medium">Email</label><input id="email" type="email" placeholder="nama@contoh.id" class="h-12 w-full cursor-not-allowed rounded-xl border border-forest-900/15 bg-paper px-4 text-sm placeholder:text-forest-950/35" /></div><div><label for="password" class="mb-2 block text-sm font-medium">Kata sandi</label><input id="password" type="password" placeholder="Masukkan kata sandi" class="h-12 w-full cursor-not-allowed rounded-xl border border-forest-900/15 bg-paper px-4 text-sm placeholder:text-forest-950/35" /></div><button type="button" class="btn w-full cursor-not-allowed bg-forest-900/40 text-white">Masuk — segera tersedia</button></fieldset>
-                <p id="access-note" class="mt-4 text-center text-xs leading-6 text-forest-950/55">Akun dan akses berdasarkan peran akan dihubungkan pada tahap autentikasi.</p><a href="{{ route('guide') }}" class="mt-7 flex items-center justify-center gap-3 text-sm font-medium text-forest-700">Baca panduan terlebih dahulu <x-icon class="size-4" /></a>
-            </div>
-        </div>
-    </section>
+<x-layouts.public title="Masuk">
+    <div class="container-page py-10 sm:py-14">
+        <section class="mx-auto max-w-md rounded-lg border border-slate-200 p-6 sm:p-8" aria-labelledby="login-title">
+            <h1 id="login-title" class="text-2xl font-semibold">Masuk</h1>
+            <p class="muted mt-2">Gunakan akun Anda untuk mengakses pelaporan.</p>
+
+            <p id="access-note" class="mt-5 rounded-md bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+                <strong>Login belum tersedia.</strong> Halaman ini masih berupa rancangan tampilan. Formulir akan diaktifkan setelah autentikasi selesai dibuat.
+            </p>
+
+            <fieldset disabled aria-describedby="access-note" class="mt-6 space-y-5">
+                <legend class="sr-only">Rancangan formulir masuk yang belum aktif</legend>
+                <div>
+                    <label for="email" class="mb-2 block text-sm font-medium">Email</label>
+                    <input id="email" type="email" autocomplete="off" placeholder="nama@contoh.id" class="field cursor-not-allowed">
+                </div>
+                <div>
+                    <label for="password" class="mb-2 block text-sm font-medium">Kata sandi</label>
+                    <input id="password" type="password" autocomplete="off" placeholder="Kata sandi" class="field cursor-not-allowed">
+                </div>
+                <button type="button" class="btn w-full cursor-not-allowed bg-slate-200 text-slate-500">Masuk</button>
+            </fieldset>
+
+            <p class="mt-5 text-xs leading-6 text-slate-500">Akses pelapor, relawan, dan koordinator akan ditentukan dari akun yang digunakan.</p>
+            <a href="{{ route('guide') }}" class="mt-6 inline-flex min-h-11 items-center text-sm text-forest-700 underline underline-offset-4">Baca panduan pelaporan</a>
+        </section>
+    </div>
 </x-layouts.public>
