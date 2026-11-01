@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaSummaryController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Coordinator\AreaController;
 use App\Http\Controllers\Coordinator\ClosureController;
@@ -24,6 +25,8 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/wilayah/{area}/ringkasan', AreaSummaryController::class)->whereNumber('area')
+        ->middleware('role:pelapor,relawan,koordinator')->name('areas.summary');
     Route::get('/laporan/{report}/bukti', EvidenceController::class)->whereNumber('report')->name('reports.evidence');
 
     Route::middleware('role:relawan')->prefix('relawan')->name('relawan.')->group(function (): void {
