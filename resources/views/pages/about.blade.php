@@ -1,14 +1,40 @@
-<x-layouts.public title="Tentang Karhutla" description="Kenali Karhutla, aplikasi komunitas untuk menghubungkan pelapor, relawan pemantau, dan koordinator relawan.">
-    <section class="container-page pt-12 pb-16 lg:pt-18">
-        <p class="eyebrow"><a href="{{ route('home') }}" class="hover:underline">Beranda</a><span>/</span>Tentang Karhutla</p>
-        <div class="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-end"><h1 class="section-title !text-4xl sm:!text-5xl lg:!text-6xl">Kepedulian lokal.<br>Tujuan yang sama.</h1><p class="muted">Karhutla dirancang sebagai ruang komunitas untuk menyampaikan dan memantau informasi indikasi kebakaran hutan dan lahan. Berawal dari pengamatan, bergerak melalui informasi yang terstruktur.</p></div>
-    </section>
-    <section class="container-page pb-18"><div class="relative overflow-hidden rounded-[28px] bg-forest-900 p-8 text-white sm:p-12 lg:p-16"><img src="{{ asset('images/forest-landscape.svg') }}" alt="" class="pointer-events-none absolute top-0 right-0 h-full w-1/2 object-cover opacity-20" width="700" height="800"><div class="relative max-w-2xl"><x-icon name="leaf" class="mb-7 size-10 text-[#bbd2b7]" /><h2 class="section-title">Informasi yang tersebar<br>perlu ruang untuk terhubung.</h2><p class="mt-6 max-w-xl text-sm leading-8 text-white/70">Laporan dari beberapa orang dapat menyebut lokasi dan kondisi yang berbeda. Alur peninjauan membantu membedakan informasi baru, informasi yang perlu dilengkapi, dan informasi yang perlu diteruskan kepada pihak terkait.</p></div></div></section>
-    <section class="container-page pb-20"><p class="eyebrow">Tiga peran, satu kepedulian</p><h2 class="section-title">Setiap orang punya bagian.</h2><div class="mt-10 grid gap-5 md:grid-cols-3">
-        @foreach([['file', 'Pelapor', 'Pengamatan dari masyarakat', ['Membuat laporan kejadian dan lokasi.', 'Melengkapi bukti jika tersedia.', 'Memperbaiki laporan saat diperbolehkan.', 'Memantau laporan miliknya.']], ['eye', 'Relawan Pemantau', 'Peninjauan informasi', ['Meninjau kelengkapan dan kewajaran.', 'Melihat laporan terkait di area sama.', 'Memberikan catatan peninjauan.', 'Menandai kebutuhan penerusan.']], ['users', 'Koordinator Relawan', 'Koordinasi tindak lanjut', ['Mengelola data pendukung.', 'Mengelola kebutuhan akses relawan.', 'Melihat rekap laporan.', 'Mencatat penerusan ke pihak terkait.']]] as [$icon, $heading, $subtitle, $items])
-            <article class="rounded-2xl border border-forest-900/10 bg-white p-7"><x-icon :name="$icon" class="mb-7 size-8 text-forest-700" /><p class="mb-2 text-[10px] font-medium uppercase tracking-widest text-forest-700">{{ $subtitle }}</p><h3 class="text-xl font-medium tracking-tight">{{ $heading }}</h3><ul class="mt-5 space-y-3">@foreach($items as $item)<li class="flex items-start gap-2 text-sm leading-6 text-forest-950/65"><x-icon name="check" class="mt-1 size-4 text-forest-700" /><span>{{ $item }}</span></li>@endforeach</ul></article>
-        @endforeach
-    </div></section>
-    <section class="border-y border-forest-900/10 bg-[#f0f2e9] py-16"><div class="container-page grid gap-10 lg:grid-cols-2 lg:gap-20"><div><p class="eyebrow">Batas peran aplikasi</p><h2 class="section-title">Membantu informasi.<br>Menjaga kejelasan.</h2></div><div class="space-y-6"><div><h3 class="font-semibold">Peninjauan komunitas</h3><p class="muted mt-2">Relawan meninjau informasi yang dikirim. Peninjauan ini bukan penetapan resmi bahwa kebakaran benar-benar terjadi.</p></div><div><h3 class="font-semibold">Pihak terkait tetap di luar aplikasi</h3><p class="muted mt-2">Koordinator dapat mencatat penerusan informasi kepada pihak yang relevan. Platform ini tidak menjalankan operasi pemadaman atau layanan tanggap darurat.</p></div><div><h3 class="font-semibold">Privasi menjadi bagian dari rancangan</h3><p class="muted mt-2">Laporan pribadi tidak ditampilkan di halaman publik. Akses laporan pada tahap aplikasi berikutnya dibatasi berdasarkan kepemilikan dan kewenangan.</p></div></div></div></section>
-    <section class="container-page flex flex-col items-start justify-between gap-6 py-16 md:flex-row md:items-center"><div><h2 class="text-2xl font-medium tracking-tight">Mulai dengan memahami cara melapor.</h2><p class="muted mt-2">Informasi yang jelas membantu proses berikutnya.</p></div><a href="{{ route('guide') }}" class="btn btn-primary">Baca panduan <x-icon class="size-4" /></a></section>
+<x-layouts.public title="Tentang aplikasi">
+    <div class="container-page py-8 sm:py-10">
+        <div class="page-heading">
+            <p class="eyebrow"><a href="{{ route('home') }}" class="hover:underline">Beranda</a><span>/</span>Tentang aplikasi</p>
+            <h1 class="section-title">Tentang Karhutla</h1>
+            <p class="muted mt-2 max-w-3xl">Aplikasi komunitas untuk pelaporan, peninjauan, dan pemantauan informasi indikasi kebakaran hutan dan lahan.</p>
+        </div>
+
+        <section class="max-w-3xl" aria-labelledby="purpose-title">
+            <h2 id="purpose-title" class="text-lg font-semibold">Tujuan aplikasi</h2>
+            <p class="muted mt-2">Karhutla membantu masyarakat menyampaikan informasi kejadian secara terstruktur. Relawan meninjau kelengkapan informasi, sedangkan koordinator mencatat penerusan informasi kepada pihak terkait.</p>
+        </section>
+
+        <section class="mt-8" aria-labelledby="roles-title">
+            <h2 id="roles-title" class="text-lg font-semibold">Pengguna dan kewenangan</h2>
+            <div class="mt-4 overflow-x-auto rounded-md border border-slate-200" role="region" aria-label="Tabel peran pengguna, dapat digeser pada layar kecil" tabindex="0">
+                <table class="w-full min-w-[560px] border-collapse text-left text-sm leading-7">
+                    <caption class="sr-only">Rancangan pembagian fungsi pengguna pada aplikasi Karhutla</caption>
+                    <thead class="bg-slate-50"><tr><th scope="col" class="w-52 px-5 py-3 font-semibold">Pengguna</th><th scope="col" class="px-5 py-3 font-semibold">Fungsi utama</th></tr></thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr><th scope="row" class="px-5 py-4 align-top font-medium">Pelapor</th><td class="px-5 py-4 text-slate-600">Membuat laporan, melengkapi lokasi dan bukti, memperbaiki saat diperbolehkan, serta memantau laporan miliknya.</td></tr>
+                        <tr><th scope="row" class="px-5 py-4 align-top font-medium">Relawan Pemantau</th><td class="px-5 py-4 text-slate-600">Meninjau informasi, melihat laporan terkait pada wilayah sama, memberi catatan, dan menandai laporan yang perlu diteruskan.</td></tr>
+                        <tr><th scope="row" class="px-5 py-4 align-top font-medium">Koordinator Relawan</th><td class="px-5 py-4 text-slate-600">Mengelola data pendukung dan kebutuhan akses relawan, melihat rekap, serta mencatat penerusan informasi kepada pihak terkait.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mt-8 max-w-3xl" aria-labelledby="limits-title">
+            <h2 id="limits-title" class="text-lg font-semibold">Batasan aplikasi</h2>
+            <ul class="muted mt-3 list-disc space-y-2 pl-5">
+                <li>Peninjauan relawan bukan verifikasi resmi bahwa kebakaran benar-benar terjadi.</li>
+                <li>Status selesai berarti proses dalam aplikasi selesai, bukan pernyataan bahwa api telah padam.</li>
+                <li>Pihak terkait merupakan pihak eksternal dan tidak wajib memiliki akun aplikasi.</li>
+                <li>Aplikasi ini tidak menjalankan operasi pemadaman atau layanan tanggap darurat.</li>
+            </ul>
+            <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600"><strong class="text-slate-700">Status pengembangan:</strong> halaman publik sudah tersedia. Login, pembatasan akses, dan pengelolaan laporan belum diimplementasikan.</p>
+        </section>
+    </div>
 </x-layouts.public>
