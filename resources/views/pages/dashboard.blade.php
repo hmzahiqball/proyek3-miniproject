@@ -38,6 +38,7 @@
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary">Kelola wilayah</a>
                         <a href="{{ route('koordinator.reports.index') }}" class="btn btn-outline">Koordinasi laporan</a>
+                        <a href="{{ route('reports.recap') }}" class="btn btn-outline">Rekap laporan</a>
                     </div>
                     <p class="muted mt-4">Catat tujuan, waktu, dan catatan penerusan pada laporan yang perlu diteruskan. Setelah itu, tutup proses dengan catatan penyelesaian.</p>
                 @elseif(auth()->user()->role === \App\Enums\UserRole::Pelapor)
@@ -47,7 +48,10 @@
                     </div>
                     <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri beserta bukti saat status mengizinkan. Kirim ulang tersedia setelah laporan diminta diperbaiki.</p>
                 @else
-                    <a href="{{ route('relawan.reports.index') }}" class="btn btn-primary mt-6">Pantau laporan</a>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <a href="{{ route('relawan.reports.index') }}" class="btn btn-primary">Pantau laporan</a>
+                        <a href="{{ route('reports.recap') }}" class="btn btn-outline">Rekap laporan</a>
+                    </div>
                     <p class="muted mt-4">Mulai peninjauan, beri keputusan beserta catatan, dan lihat laporan terkait. Setiap tindakan mengikuti status laporan.</p>
                 @endif
             </section>

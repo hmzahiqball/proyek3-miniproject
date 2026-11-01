@@ -4,6 +4,7 @@
         <div class="page-heading mt-5">
             <h1 class="section-title">Pemantauan laporan</h1>
             <p class="muted mt-2">Laporan dari seluruh Pelapor, diurutkan dari yang terbaru.</p>
+            <a href="{{ route('reports.recap') }}" class="mt-3 inline-block text-sm text-forest-900 underline">Lihat rekap laporan</a>
         </div>
 
         <x-report-filters :areas="$areas" :filters="$filters" :action="route('relawan.reports.index')" :total="$reports->total()" />
