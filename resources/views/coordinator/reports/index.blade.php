@@ -6,6 +6,8 @@
             <p class="muted mt-2">Laporan dari seluruh Pelapor, diurutkan dari yang terbaru.</p>
         </div>
 
+        <x-report-filters :areas="$areas" :filters="$filters" :action="route('koordinator.reports.index')" :total="$reports->total()" />
+
         <div class="space-y-3">
             @forelse($reports as $report)
                 <article class="panel min-w-0" aria-labelledby="report-{{ $report->id }}">
@@ -21,7 +23,13 @@
                     <a href="{{ route('koordinator.reports.show', $report) }}" class="btn btn-outline mt-4" aria-label="Lihat laporan {{ $report->title }}">Lihat laporan</a>
                 </article>
             @empty
-                <p class="panel muted">Belum ada laporan yang masuk.</p>
+                @if($reports->total() > 0)
+                    <p class="panel muted">Tidak ada laporan pada halaman ini. <a href="{{ $reports->url(1) }}" class="text-forest-900 underline">Kembali ke halaman pertama</a>.</p>
+                @elseif($filters)
+                    <p class="panel muted">Tidak ada laporan yang sesuai pencarian dan filter. Ubah pilihan atau gunakan Reset filter.</p>
+                @else
+                    <p class="panel muted">Belum ada laporan yang masuk.</p>
+                @endif
             @endforelse
         </div>
         @if($reports->hasPages())

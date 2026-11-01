@@ -9,6 +9,8 @@
             <a href="{{ route('pelapor.reports.create') }}" class="btn btn-primary">Buat laporan</a>
         </div>
 
+        <x-report-filters :areas="$areas" :filters="$filters" :action="route('pelapor.reports.index')" :total="$reports->total()" />
+
         <div class="space-y-3">
             @forelse($reports as $report)
                 <article class="panel min-w-0" aria-labelledby="report-{{ $report->id }}">
@@ -24,7 +26,13 @@
                     <a href="{{ route('pelapor.reports.show', $report) }}" class="btn btn-outline mt-4" aria-label="Lihat detail laporan {{ $report->title }}">Lihat detail</a>
                 </article>
             @empty
-                <p class="panel muted">Anda belum mengirim laporan. Pilih Buat laporan untuk mencatat kejadian.</p>
+                @if($reports->total() > 0)
+                    <p class="panel muted">Tidak ada laporan pada halaman ini. <a href="{{ $reports->url(1) }}" class="text-forest-900 underline">Kembali ke halaman pertama</a>.</p>
+                @elseif($filters)
+                    <p class="panel muted">Tidak ada laporan yang sesuai pencarian dan filter. Ubah pilihan atau gunakan Reset filter.</p>
+                @else
+                    <p class="panel muted">Anda belum mengirim laporan. Pilih Buat laporan untuk mencatat kejadian.</p>
+                @endif
             @endforelse
         </div>
         @if($reports->hasPages())
