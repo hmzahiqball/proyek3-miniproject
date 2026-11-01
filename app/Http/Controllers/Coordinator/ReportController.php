@@ -30,6 +30,7 @@ class ReportController extends Controller
 
         return view('coordinator.reports.show', [
             'report' => $report,
+            'statusLogs' => $report->statusLogs()->with('changedBy:id,name')->latest('created_at')->latest('id')->paginate(10, ['*'], 'riwayat'),
             'reviews' => $report->reviews()->with('reviewer:id,name')->latest('created_at')->latest('id')->paginate(10, ['*'], 'catatan'),
             'relatedReports' => Report::query()->where('area_id', $report->area_id)->whereKeyNot($report->id)
                 ->latest('created_at')->latest('id')->paginate(5, ['*'], 'terkait'),

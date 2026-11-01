@@ -41,6 +41,7 @@ class ReportController extends Controller
 
         return view('reporter.reports.show', [
             'report' => $report,
+            'statusLogs' => $report->statusLogs()->with('changedBy:id,name')->latest('created_at')->latest('id')->paginate(10, ['*'], 'riwayat'),
             'reviews' => $report->reviews()->with('reviewer:id,name')->latest('created_at')->latest('id')->paginate(10, ['*'], 'catatan'),
         ]);
     }

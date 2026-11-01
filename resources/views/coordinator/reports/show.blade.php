@@ -50,6 +50,7 @@
         @endcan
         <x-report-details :report="$report" />
         <x-review-history :reviews="$reviews" />
+        <x-status-history :status-logs="$statusLogs" />
         <section class="panel mt-6" aria-labelledby="forwarding-title">
             <h2 id="forwarding-title" class="text-lg font-semibold">Catatan penerusan</h2>
             @if($report->forwarding)

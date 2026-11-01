@@ -31,6 +31,7 @@
 
         <x-report-details :report="$report" />
         <x-review-history :reviews="$reviews" />
+        <x-status-history :status-logs="$statusLogs" />
         <p class="muted mt-6">Status menunjukkan proses dalam aplikasi. Status selesai bukan pernyataan bahwa api telah padam.</p>
     </div>
 </x-layouts.public>

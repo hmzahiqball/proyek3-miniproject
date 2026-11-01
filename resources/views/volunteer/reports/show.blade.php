@@ -48,6 +48,7 @@
 
         <x-report-details :report="$report" />
         <x-review-history :reviews="$reviews" />
+        <x-status-history :status-logs="$statusLogs" />
 
         <x-related-reports :report="$report" :reports="$relatedReports" detail-route="relawan.reports.show" />
         <p class="muted mt-6">Peninjauan komunitas bukan verifikasi resmi kejadian. Status selesai menunjukkan proses dalam aplikasi telah selesai.</p>
