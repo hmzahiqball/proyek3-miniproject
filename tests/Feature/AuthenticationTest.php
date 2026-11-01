@@ -33,7 +33,7 @@ class AuthenticationTest extends TestCase
             ->assertRedirect(route('dashboard'));
 
         $this->assertAuthenticatedAs($user);
-        $this->get(route('dashboard'))->assertOk()->assertSee($user->name)->assertSee($role->label());
+        $this->followingRedirects()->get(route('dashboard'))->assertOk()->assertSee($user->name)->assertSee($role->label());
     }
 
     public static function userRoles(): array
@@ -126,7 +126,7 @@ class AuthenticationTest extends TestCase
         $this->get(route('dashboard'))->assertRedirect(route('access'));
         $this->post(route('login.store'), ['email' => $user->email, 'password' => 'password'])
             ->assertRedirect(route('dashboard'));
-        $this->get(route('dashboard'))->assertOk();
+        $this->followingRedirects()->get(route('dashboard'))->assertOk();
     }
 
     public function test_guest_json_request_to_dashboard_receives_unauthorized(): void
