@@ -1,4 +1,12 @@
 @props(['report'])
+@if($report->closed_at && $report->closure_note)
+    <section class="panel mb-6" aria-labelledby="closure-title">
+        <h2 id="closure-title" class="text-lg font-semibold">Penyelesaian proses laporan</h2>
+        <p class="mt-2 text-xs text-slate-500">{{ $report->closed_at->timezone('Asia/Jakarta')->format('d/m/Y H:i') }} WIB</p>
+        <p class="mt-3 whitespace-pre-line break-words text-sm leading-7">{{ $report->closure_note }}</p>
+        <p class="muted mt-3">Proses dalam aplikasi selesai; ini bukan pernyataan bahwa api telah padam.</p>
+    </section>
+@endif
         <div class="grid gap-6 lg:grid-cols-2">
             <section class="panel min-w-0" aria-labelledby="event-title">
                 <h2 id="event-title" class="text-lg font-semibold">Informasi kejadian</h2>

@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Coordinator\AreaController;
+use App\Http\Controllers\Coordinator\ClosureController;
+use App\Http\Controllers\Coordinator\ReportController as CoordinatorReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\Reporter\ReportController;
+use App\Http\Controllers\Reporter\ResubmissionController;
 use App\Http\Controllers\Volunteer\ReportController as VolunteerReportController;
+use App\Http\Controllers\Volunteer\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
@@ -24,6 +28,8 @@ Route::middleware(['auth', 'active'])->group(function (): void {
     Route::middleware('role:relawan')->prefix('relawan')->name('relawan.')->group(function (): void {
         Route::get('/laporan', [VolunteerReportController::class, 'index'])->name('reports.index');
         Route::get('/laporan/{report}', [VolunteerReportController::class, 'show'])->whereNumber('report')->name('reports.show');
+        Route::post('/laporan/{report}/mulai-tinjau', [ReviewController::class, 'start'])->whereNumber('report')->name('reports.start-review');
+        Route::post('/laporan/{report}/keputusan', [ReviewController::class, 'store'])->whereNumber('report')->name('reports.review');
     });
 
     Route::middleware('role:pelapor')->prefix('pelapor')->name('pelapor.')->group(function (): void {
@@ -33,11 +39,15 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::get('/laporan/{report}', [ReportController::class, 'show'])->whereNumber('report')->name('reports.show');
         Route::get('/laporan/{report}/perbaiki', [ReportController::class, 'edit'])->whereNumber('report')->name('reports.edit');
         Route::match(['put', 'patch'], '/laporan/{report}', [ReportController::class, 'update'])->whereNumber('report')->name('reports.update');
+        Route::post('/laporan/{report}/kirim-ulang', ResubmissionController::class)->whereNumber('report')->name('reports.resubmit');
     });
 
     Route::middleware('role:koordinator')->prefix('koordinator')->name('koordinator.')->group(function (): void {
         Route::resource('wilayah', AreaController::class)
             ->parameters(['wilayah' => 'area'])->names('areas')->except('show');
+        Route::get('/laporan', [CoordinatorReportController::class, 'index'])->name('reports.index');
+        Route::get('/laporan/{report}', [CoordinatorReportController::class, 'show'])->whereNumber('report')->name('reports.show');
+        Route::post('/laporan/{report}/tutup', ClosureController::class)->whereNumber('report')->name('reports.close');
     });
 
     Route::view('/pelapor/dashboard', 'pages.dashboard', [

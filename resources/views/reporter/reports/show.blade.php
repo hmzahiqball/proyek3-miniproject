@@ -14,6 +14,21 @@
             @endcan
         </div>
 
+        @if($errors->any())
+            <div role="alert" class="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                <p class="font-semibold">Laporan belum dapat dikirim ulang. Perbaiki data berikut terlebih dahulu.</p>
+                <ul class="mt-2 list-disc pl-5">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            </div>
+        @endif
+        @can('resubmit', $report)
+            <form method="POST" action="{{ route('pelapor.reports.resubmit', $report) }}" class="panel mb-6">
+                @csrf
+                <h2 class="text-lg font-semibold">Kirim ulang untuk ditinjau</h2>
+                <p class="muted mt-2 mb-4">Baca catatan Relawan dan simpan perbaikan terlebih dahulu. Setelah dikirim ulang, laporan kembali ditinjau dan tidak dapat diedit sementara.</p>
+                <button type="submit" class="btn btn-primary">Kirim ulang laporan</button>
+            </form>
+        @endcan
+
         <x-report-details :report="$report" />
         <x-review-history :reviews="$reviews" />
         <p class="muted mt-6">Status menunjukkan proses dalam aplikasi. Status selesai bukan pernyataan bahwa api telah padam.</p>

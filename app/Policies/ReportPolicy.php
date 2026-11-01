@@ -50,4 +50,61 @@ class ReportPolicy
             || $this->view($user, $report)->allowed()
         ) ? Response::allow() : Response::denyAsNotFound();
     }
+
+    public function startReview(User $user, Report $report): Response
+    {
+        if (! $this->monitorAny($user)) {
+            return Response::deny();
+        }
+
+        return $report->status === ReportStatus::Baru
+            ? Response::allow()
+            : Response::denyWithStatus(409, 'Peninjauan hanya dapat dimulai dari status Baru. Muat ulang laporan untuk melihat status terkini.');
+    }
+
+    public function review(User $user, Report $report): Response
+    {
+        if (! $this->monitorAny($user)) {
+            return Response::deny();
+        }
+
+        return $report->status === ReportStatus::Ditinjau
+            ? Response::allow()
+            : Response::denyWithStatus(409, 'Keputusan peninjauan hanya dapat disimpan pada status Ditinjau.');
+    }
+
+    public function resubmit(User $user, Report $report): Response
+    {
+        if (! $this->view($user, $report)->allowed()) {
+            return Response::denyAsNotFound();
+        }
+
+        return $report->status === ReportStatus::PerluPerbaikan
+            ? Response::allow()
+            : Response::denyWithStatus(409, 'Kirim ulang hanya tersedia pada status Perlu Perbaikan.');
+    }
+
+    public function coordinateAny(User $user): bool
+    {
+        return $user->is_active && $user->role === UserRole::Koordinator;
+    }
+
+    public function coordinate(User $user, Report $report): bool
+    {
+        return $this->coordinateAny($user);
+    }
+
+    public function closeForwarded(User $user, Report $report): Response
+    {
+        if (! $this->coordinateAny($user)) {
+            return Response::deny();
+        }
+        if ($report->status !== ReportStatus::Diteruskan) {
+            return Response::denyWithStatus(409, 'Penutupan Koordinator hanya tersedia pada status Diteruskan.');
+        }
+
+        return $report->forwarding()->exists()
+            ? Response::allow()
+            : Response::denyWithStatus(409, 'Catatan penerusan harus tersedia sebelum laporan dapat ditutup.');
+    }
 }
