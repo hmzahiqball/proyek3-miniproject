@@ -12,6 +12,7 @@ class DemoUserSeeder extends Seeder
     {
         $accounts = [
             ['Pelapor Demo', 'pelapor@example.test', UserRole::Pelapor],
+            ['Pelapor Kedua Demo', 'pelapor2@example.test', UserRole::Pelapor],
             ['Relawan Demo', 'relawan@example.test', UserRole::Relawan],
             ['Koordinator Demo', 'koordinator@example.test', UserRole::Koordinator],
         ];

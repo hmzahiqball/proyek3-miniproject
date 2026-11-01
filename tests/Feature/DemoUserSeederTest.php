@@ -19,6 +19,7 @@ class DemoUserSeederTest extends TestCase
 
         foreach ([
             'pelapor@example.test' => UserRole::Pelapor,
+            'pelapor2@example.test' => UserRole::Pelapor,
             'relawan@example.test' => UserRole::Relawan,
             'koordinator@example.test' => UserRole::Koordinator,
         ] as $email => $role) {
@@ -30,7 +31,7 @@ class DemoUserSeederTest extends TestCase
             $this->assertNotSame('KarhutlaDemo123!', $user->password);
         }
 
-        $this->assertDatabaseCount('users', 3);
+        $this->assertDatabaseCount('users', 4);
     }
 
     public function test_reseeding_does_not_duplicate_accounts_or_reset_existing_account_changes(): void
@@ -46,7 +47,7 @@ class DemoUserSeederTest extends TestCase
         $this->seed(DemoUserSeeder::class);
         $user->refresh();
 
-        $this->assertDatabaseCount('users', 3);
+        $this->assertDatabaseCount('users', 4);
         $this->assertSame('Nama relawan yang diperbarui', $user->name);
         $this->assertSame($passwordHash, $user->password);
         $this->assertFalse($user->is_active);

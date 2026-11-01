@@ -302,7 +302,7 @@ class DatabaseSchemaTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertDatabaseCount('areas', 3);
-        $this->assertDatabaseCount('users', 3);
+        $this->assertDatabaseCount('users', 4);
         $this->assertSame('Nama wilayah yang diperbarui', $area->fresh()->name);
         $this->assertFalse($area->fresh()->is_active);
         $this->assertDatabaseHas('areas', ['code' => 'DEMO-B', 'name' => 'Wilayah Demo B']);
