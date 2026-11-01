@@ -59,14 +59,20 @@
                 <legend class="pr-3 text-lg font-semibold">Lokasi kejadian</legend>
                 <div>
                     <label for="area_id" class="block text-sm font-medium">Wilayah</label>
-                    <select id="area_id" name="area_id" required class="field mt-2" aria-describedby="area-help{{ $errors->has('area_id') ? ' area-error' : '' }}" @error('area_id') aria-invalid="true" @enderror>
+                    <select id="area_id" name="area_id" data-area-summary-select required class="field mt-2" aria-describedby="area-help area-summary-status{{ $errors->has('area_id') ? ' area-error' : '' }}" @error('area_id') aria-invalid="true" @enderror>
                         <option value="">Pilih wilayah</option>
                         @foreach($areas as $area)
-                            <option value="{{ $area->id }}" @selected($oldInput('area_id') === (string) $area->id)>{{ $area->name }} ({{ $area->code }}){{ ! $area->is_active ? ' — nonaktif, wilayah saat ini' : '' }}</option>
+                            <option value="{{ $area->id }}" data-summary-url="{{ route('areas.summary', $area) }}" @selected($oldInput('area_id') === (string) $area->id)>{{ $area->name }} ({{ $area->code }}){{ ! $area->is_active ? ' — nonaktif, wilayah saat ini' : '' }}</option>
                         @endforeach
                     </select>
                     <p id="area-help" class="mt-2 text-xs leading-6 text-slate-500">{{ $report->exists ? 'Wilayah lama yang nonaktif boleh dipertahankan. Jika mengganti wilayah, pilih wilayah aktif.' : 'Hanya wilayah aktif yang tersedia.' }}</p>
                     @error('area_id') <p id="area-error" class="mt-2 text-sm text-red-700">{{ $message }}</p> @enderror
+                    <div class="mt-3 rounded-md bg-slate-50 p-3 text-sm leading-6 text-slate-600">
+                        <p id="area-summary-status" data-area-summary-status role="status" aria-live="polite" aria-atomic="true">Pilih wilayah untuk melihat jumlah laporan aktif milik Anda.</p>
+                        <p class="mt-1 text-xs text-slate-500">Laporan aktif adalah laporan yang belum berstatus Selesai. Hitungan ini hanya mencakup laporan Anda sendiri.</p>
+                        <button type="button" data-area-summary-retry hidden class="mt-2 font-medium text-forest-900 underline">Coba muat ulang informasi wilayah</button>
+                        <noscript><p class="mt-2">Aktifkan JavaScript untuk melihat ringkasan wilayah. Formulir tetap dapat dikirim tanpa ringkasan ini.</p></noscript>
+                    </div>
                 </div>
                 <div>
                     <label for="location_description" class="block text-sm font-medium">Petunjuk lokasi</label>

@@ -1,6 +1,8 @@
 import { initializeLocationPicker } from './location-picker';
+import { initializeAreaSummary } from './area-summary';
 
 initializeLocationPicker();
+initializeAreaSummary();
 
 const menuButton = document.querySelector('[data-menu-toggle]');
 const mobileMenu = document.querySelector('[data-mobile-menu]');
