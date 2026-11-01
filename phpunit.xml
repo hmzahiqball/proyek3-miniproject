@@ -26,7 +26,7 @@
         <env name="DB_CONNECTION" value="mysql" force="true"/>
         <env name="DB_DATABASE" value="karhutla_testing"/>
         <env name="DB_URL" value="" force="true"/>
-        <env name="REQUIRE_MYSQL_SERVER" value="true" force="true"/>
+        <env name="REQUIRE_MYSQL_CONNECTION" value="true" force="true"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

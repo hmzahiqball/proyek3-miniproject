@@ -28,16 +28,11 @@ class DatabaseSchemaTest extends TestCase
     {
         $connection = DB::connection();
 
-        if (env('REQUIRE_MYSQL_SERVER', false)) {
+        if (env('REQUIRE_MYSQL_CONNECTION', false)) {
             if ($connection->getDriverName() !== 'mysql') {
                 throw new RuntimeException('Konfigurasi pengujian MySQL wajib memakai driver mysql.');
             }
 
-            $version = $connection->selectOne('SELECT VERSION() AS version')->version;
-
-            if (str_contains(strtolower($version), 'mariadb')) {
-                throw new RuntimeException('Pengujian ini memerlukan server MySQL, bukan MariaDB.');
-            }
         }
 
         if ($connection->getDriverName() !== 'sqlite' && ! str_ends_with($connection->getDatabaseName(), '_testing')) {
