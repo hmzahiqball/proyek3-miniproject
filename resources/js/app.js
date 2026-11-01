@@ -26,7 +26,7 @@ if (menuButton && mobileMenu) {
         }
     });
 
-    window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (event) => {
         if (event.matches) closeMenu();
     });
 }

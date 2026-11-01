@@ -7,10 +7,14 @@
                     Sampaikan indikasi kebakaran di sekitar Anda. Laporan akan ditinjau oleh relawan dan dapat diteruskan kepada pihak terkait.
                 </p>
                 <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="{{ route('access') }}" class="btn btn-primary">Masuk untuk melapor</a>
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="btn btn-primary">Buka akun saya</a>
+                    @else
+                        <a href="{{ route('access') }}" class="btn btn-primary">Masuk ke akun</a>
+                    @endauth
                     <a href="{{ route('guide') }}" class="btn btn-outline">Panduan pelaporan</a>
                 </div>
-                <p class="mt-4 text-xs leading-6 text-slate-500">Saat ini baru tersedia tampilan publik. Login dan pengiriman laporan belum aktif.</p>
+                <p class="mt-4 text-xs leading-6 text-slate-500">Login sudah tersedia. Fitur pengiriman laporan masih dalam pengembangan.</p>
             </div>
             <aside class="panel" aria-labelledby="preparation-title">
                 <h2 id="preparation-title" class="text-base font-semibold">Informasi yang perlu disiapkan</h2>

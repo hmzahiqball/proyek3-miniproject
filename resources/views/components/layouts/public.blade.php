@@ -25,28 +25,36 @@
                     <span class="hidden text-xs text-slate-500 sm:block">Pelaporan dan pemantauan</span>
                 </span>
             </a>
-            <nav aria-label="Navigasi utama" class="hidden items-center gap-1 md:flex">
+            <nav aria-label="Navigasi utama" class="hidden items-center gap-1 lg:flex">
                 @foreach(['home' => 'Beranda', 'guide' => 'Panduan', 'about' => 'Tentang aplikasi'] as $name => $label)
                     <a class="nav-link" href="{{ route($name) }}" @if(request()->routeIs($name)) aria-current="page" @endif>{{ $label }}</a>
                 @endforeach
                 <a class="nav-link" href="{{ route('home') }}#pertanyaan">FAQ</a>
-                <a class="btn btn-primary ml-3" href="{{ route('access') }}" @if(request()->routeIs('access')) aria-current="page" @endif>Masuk</a>
+                <x-account-navigation class="ml-3" />
             </nav>
-            <button type="button" data-menu-toggle aria-expanded="false" aria-controls="menu-mobile" aria-label="Buka menu navigasi" class="flex size-11 items-center justify-center rounded-md border border-slate-300 md:hidden">
+            <button type="button" data-menu-toggle aria-expanded="false" aria-controls="menu-mobile" aria-label="Buka menu navigasi" class="flex size-11 items-center justify-center rounded-md border border-slate-300 lg:hidden">
                 <x-icon name="menu" />
             </button>
         </div>
-        <nav id="menu-mobile" data-mobile-menu hidden aria-label="Navigasi seluler" class="container-page border-t border-slate-200 py-3 md:hidden">
+        <nav id="menu-mobile" data-mobile-menu hidden aria-label="Navigasi seluler" class="container-page border-t border-slate-200 py-3 lg:hidden">
             <div class="flex flex-col gap-1">
-                @foreach(['home' => 'Beranda', 'guide' => 'Panduan', 'about' => 'Tentang aplikasi', 'access' => 'Masuk'] as $name => $label)
+                @foreach(['home' => 'Beranda', 'guide' => 'Panduan', 'about' => 'Tentang aplikasi'] as $name => $label)
                     <a class="nav-link" href="{{ route($name) }}" @if(request()->routeIs($name)) aria-current="page" @endif>{{ $label }}</a>
                 @endforeach
                 <a class="nav-link" href="{{ route('home') }}#pertanyaan">FAQ</a>
+                <x-account-navigation :mobile="true" class="mt-2" />
             </div>
         </nav>
     </header>
 
-    <main id="konten" class="flex-1">{{ $slot }}</main>
+    <main id="konten" class="flex-1">
+        @if(session('status'))
+            <div class="container-page mt-6">
+                <p role="status" class="rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-900">{{ session('status') }}</p>
+            </div>
+        @endif
+        {{ $slot }}
+    </main>
 
     <footer class="mt-8 border-t border-slate-200 bg-slate-50 py-7">
         <div class="container-page flex flex-col justify-between gap-4 text-xs leading-6 text-slate-600 sm:flex-row">
