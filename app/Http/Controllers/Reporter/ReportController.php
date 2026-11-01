@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reporter;
 use App\Enums\ReportStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use App\Models\Area;
 use App\Models\Report;
 use Illuminate\Http\RedirectResponse;
@@ -36,9 +37,43 @@ class ReportController extends Controller
 
     public function create(): View
     {
-        return view('reporter.reports.create', [
+        return view('reporter.reports.form', [
+            'report' => new Report,
             'areas' => Area::query()->where('is_active', true)->orderBy('name')->orderBy('id')->get(),
         ]);
+    }
+
+    public function edit(Request $request, string $report): View
+    {
+        $report = $request->user()->reports()->findOrFail($report);
+        Gate::authorize('update', $report);
+
+        return view('reporter.reports.form', [
+            'report' => $report,
+            'areas' => Area::query()->where('is_active', true)->orWhere('id', $report->area_id)
+                ->orderBy('name')->orderBy('id')->get(),
+        ]);
+    }
+
+    public function update(UpdateReportRequest $request, string $report): RedirectResponse
+    {
+        DB::transaction(function () use ($request, $report): void {
+            $report = $request->user()->reports()->lockForUpdate()->findOrFail($report);
+            Gate::authorize('update', $report);
+            $area = Area::query()->lockForUpdate()->find($request->validated('area_id'));
+
+            if (! $area || (! $area->is_active && $area->id !== $report->area_id)) {
+                throw ValidationException::withMessages([
+                    'area_id' => 'Wilayah pengganti harus aktif. Wilayah lama yang nonaktif boleh dipertahankan.',
+                ]);
+            }
+
+            $report->fill($request->validated());
+            $report->occurred_at = $request->occurredAtUtc();
+            $report->save();
+        });
+
+        return to_route('pelapor.reports.show', $report)->with('status', 'Perbaikan laporan berhasil disimpan. Status laporan tetap.');
     }
 
     public function store(StoreReportRequest $request): RedirectResponse

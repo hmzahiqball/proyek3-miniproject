@@ -23,6 +23,8 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::get('/laporan/buat', [ReportController::class, 'create'])->name('reports.create');
         Route::post('/laporan', [ReportController::class, 'store'])->name('reports.store');
         Route::get('/laporan/{report}', [ReportController::class, 'show'])->whereNumber('report')->name('reports.show');
+        Route::get('/laporan/{report}/perbaiki', [ReportController::class, 'edit'])->whereNumber('report')->name('reports.edit');
+        Route::match(['put', 'patch'], '/laporan/{report}', [ReportController::class, 'update'])->whereNumber('report')->name('reports.update');
     });
 
     Route::middleware('role:koordinator')->prefix('koordinator')->name('koordinator.')->group(function (): void {

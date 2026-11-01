@@ -1,12 +1,17 @@
-<x-layouts.public title="Buat laporan">
+<x-layouts.public :title="$report->exists ? 'Perbaiki laporan' : 'Buat laporan'">
     @php
-        $oldInput = fn (string $field): string => is_scalar(old($field)) ? (string) old($field) : '';
+        $oldInput = function (string $field) use ($report): string {
+            $default = $field === 'occurred_at' ? $report->occurred_at?->timezone('Asia/Jakarta')->format('Y-m-d\TH:i') : $report->{$field};
+            $value = old($field, $default);
+
+            return is_scalar($value) ? (string) $value : '';
+        };
     @endphp
     <div class="container-page py-8 sm:py-10">
-        <a href="{{ route('pelapor.dashboard') }}" class="text-sm text-forest-900 hover:underline">Kembali ke dashboard</a>
+        <a href="{{ $report->exists ? route('pelapor.reports.show', $report) : route('pelapor.dashboard') }}" class="text-sm text-forest-900 hover:underline">{{ $report->exists ? 'Kembali ke detail laporan' : 'Kembali ke dashboard' }}</a>
         <div class="page-heading mt-5">
-            <h1 class="section-title">Buat laporan</h1>
-            <p class="muted mt-2">Catat indikasi kebakaran berdasarkan kondisi yang Anda amati.</p>
+            <h1 class="section-title">{{ $report->exists ? 'Perbaiki laporan #'.$report->id : 'Buat laporan' }}</h1>
+            <p class="muted mt-2">{{ $report->exists ? 'Perbaiki informasi kejadian dan lokasi. Menyimpan perbaikan tidak mengubah status atau mengirim ulang laporan untuk ditinjau.' : 'Catat indikasi kebakaran berdasarkan kondisi yang Anda amati.' }}</p>
         </div>
 
         @if($areas->isEmpty())
@@ -14,7 +19,7 @@
         @endif
         @if($errors->any())
             <div role="alert" class="mb-6 max-w-3xl rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                <p class="font-semibold">Laporan belum terkirim. Periksa isian berikut.</p>
+                <p class="font-semibold">{{ $report->exists ? 'Perbaikan belum disimpan. Periksa isian berikut.' : 'Laporan belum terkirim. Periksa isian berikut.' }}</p>
                 <ul class="mt-2 list-disc space-y-1 pl-5">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -23,8 +28,11 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('pelapor.reports.store') }}" class="panel max-w-3xl space-y-8">
+        <form method="POST" action="{{ $report->exists ? route('pelapor.reports.update', $report) : route('pelapor.reports.store') }}" class="panel max-w-3xl space-y-8">
             @csrf
+            @if($report->exists)
+                @method('PATCH')
+            @endif
             <fieldset class="min-w-0 space-y-5">
                 <legend class="mb-5 text-lg font-semibold">Informasi kejadian</legend>
                 <div>
@@ -54,10 +62,10 @@
                     <select id="area_id" name="area_id" required class="field mt-2" aria-describedby="area-help{{ $errors->has('area_id') ? ' area-error' : '' }}" @error('area_id') aria-invalid="true" @enderror>
                         <option value="">Pilih wilayah</option>
                         @foreach($areas as $area)
-                            <option value="{{ $area->id }}" @selected($oldInput('area_id') === (string) $area->id)>{{ $area->name }} ({{ $area->code }})</option>
+                            <option value="{{ $area->id }}" @selected($oldInput('area_id') === (string) $area->id)>{{ $area->name }} ({{ $area->code }}){{ ! $area->is_active ? ' — nonaktif, wilayah saat ini' : '' }}</option>
                         @endforeach
                     </select>
-                    <p id="area-help" class="mt-2 text-xs text-slate-500">Hanya wilayah aktif yang tersedia.</p>
+                    <p id="area-help" class="mt-2 text-xs leading-6 text-slate-500">{{ $report->exists ? 'Wilayah lama yang nonaktif boleh dipertahankan. Jika mengganti wilayah, pilih wilayah aktif.' : 'Hanya wilayah aktif yang tersedia.' }}</p>
                     @error('area_id') <p id="area-error" class="mt-2 text-sm text-red-700">{{ $message }}</p> @enderror
                 </div>
                 <div>
@@ -85,10 +93,10 @@
             </fieldset>
 
             <div class="border-t border-slate-200 pt-6">
-                <p class="muted mb-4">Semua isian wajib dilengkapi. Periksa kembali waktu dan lokasi sebelum mengirim.</p>
+                <p class="muted mb-4">Semua isian wajib dilengkapi. Periksa kembali waktu dan lokasi sebelum menyimpan.</p>
                 <div class="flex flex-wrap gap-3">
-                    <button type="submit" class="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50" @disabled($areas->isEmpty())>Kirim laporan</button>
-                    <a href="{{ route('pelapor.dashboard') }}" class="btn btn-outline">Batal</a>
+                    <button type="submit" class="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50" @disabled($areas->isEmpty())>{{ $report->exists ? 'Simpan perbaikan' : 'Kirim laporan' }}</button>
+                    <a href="{{ $report->exists ? route('pelapor.reports.show', $report) : route('pelapor.dashboard') }}" class="btn btn-outline">Batal</a>
                 </div>
             </div>
         </form>

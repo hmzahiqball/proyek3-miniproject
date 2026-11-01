@@ -5,6 +5,13 @@
             <p class="text-sm text-slate-500">Laporan #{{ $report->id }}</p>
             <h1 class="section-title mt-2 break-words">{{ $report->title }}</h1>
             <p class="mt-4 inline-block rounded bg-forest-100 px-3 py-2 text-sm font-medium text-forest-900">{{ $report->status->label() }}</p>
+            @can('update', $report)
+                <div class="mt-4">
+                    <a href="{{ route('pelapor.reports.edit', $report) }}" class="btn btn-outline">Perbaiki laporan</a>
+                </div>
+            @else
+                <p class="muted mt-4">Laporan pada status ini tidak dapat diperbaiki.</p>
+            @endcan
         </div>
 
         <div class="grid gap-6 lg:grid-cols-2">
