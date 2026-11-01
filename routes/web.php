@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Coordinator\AreaController;
 use App\Http\Controllers\Coordinator\ClosureController;
+use App\Http\Controllers\Coordinator\ForwardingController;
 use App\Http\Controllers\Coordinator\ReportController as CoordinatorReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvidenceController;
@@ -48,6 +49,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         Route::get('/laporan', [CoordinatorReportController::class, 'index'])->name('reports.index');
         Route::get('/laporan/{report}', [CoordinatorReportController::class, 'show'])->whereNumber('report')->name('reports.show');
         Route::post('/laporan/{report}/tutup', ClosureController::class)->whereNumber('report')->name('reports.close');
+        Route::post('/laporan/{report}/teruskan', ForwardingController::class)->whereNumber('report')->name('reports.forward');
     });
 
     Route::view('/pelapor/dashboard', 'pages.dashboard', [

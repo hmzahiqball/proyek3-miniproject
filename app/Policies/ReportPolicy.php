@@ -94,6 +94,17 @@ class ReportPolicy
         return $this->coordinateAny($user);
     }
 
+    public function forward(User $user, Report $report): Response
+    {
+        if (! $this->coordinateAny($user)) {
+            return Response::deny();
+        }
+
+        return $report->status === ReportStatus::PerluDiteruskan && ! $report->forwarding()->exists()
+            ? Response::allow()
+            : Response::denyWithStatus(409, 'Penerusan hanya dapat dicatat sekali, pada status Perlu Diteruskan. Muat ulang laporan untuk melihat status terkini.');
+    }
+
     public function closeForwarded(User $user, Report $report): Response
     {
         if (! $this->coordinateAny($user)) {
