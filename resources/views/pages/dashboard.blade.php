@@ -37,6 +37,9 @@
                 @if(auth()->user()->role === \App\Enums\UserRole::Koordinator)
                     <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary mt-6">Kelola wilayah</a>
                     <p class="muted mt-4">Pengelolaan wilayah sudah tersedia. Fitur proses laporan akan ditambahkan pada tahap berikutnya.</p>
+                @elseif(auth()->user()->role === \App\Enums\UserRole::Pelapor)
+                    <a href="{{ route('pelapor.reports.create') }}" class="btn btn-primary mt-6">Buat laporan</a>
+                    <p class="muted mt-4">Pengiriman laporan sudah tersedia. Daftar, perkembangan laporan, dan lampiran bukti akan ditambahkan pada tahap berikutnya.</p>
                 @else
                     <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600">Fitur operasional di atas sedang disiapkan dan belum dapat digunakan.</p>
                 @endif
