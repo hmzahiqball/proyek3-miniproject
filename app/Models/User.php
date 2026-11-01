@@ -43,4 +43,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Report::class, 'reporter_id');
     }
+
+    /** @return HasMany<ReportReview, $this> */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ReportReview::class, 'reviewer_id');
+    }
+
+    /** @return HasMany<ReportForwarding, $this> */
+    public function forwardings(): HasMany
+    {
+        return $this->hasMany(ReportForwarding::class, 'coordinator_id');
+    }
+
+    /** @return HasMany<ReportStatusLog, $this> */
+    public function statusChanges(): HasMany
+    {
+        return $this->hasMany(ReportStatusLog::class, 'changed_by');
+    }
 }

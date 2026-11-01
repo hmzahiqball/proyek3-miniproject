@@ -3,14 +3,19 @@
 namespace Tests\Feature;
 
 use App\Enums\ReportStatus;
+use App\Enums\ReviewDecision;
 use App\Enums\UserRole;
 use App\Models\Area;
 use App\Models\Report;
+use App\Models\ReportForwarding;
+use App\Models\ReportReview;
+use App\Models\ReportStatusLog;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 use Tests\TestCase;
 
@@ -178,5 +183,123 @@ class DatabaseSchemaTest extends TestCase
         $this->assertContains(['reporter_id', 'created_at'], $columns);
         $this->assertContains(['area_id', 'status'], $columns);
         $this->assertContains(['status', 'created_at'], $columns);
+    }
+
+    public function test_review_relationships_allow_multiple_reviews_for_one_report(): void
+    {
+        $review = ReportReview::factory()->create();
+        ReportReview::factory()->for($review->report)->for($review->reviewer, 'reviewer')->create();
+
+        $this->assertSame(ReviewDecision::PerluPerbaikan, $review->fresh()->decision);
+        $this->assertSame(UserRole::Relawan, $review->reviewer->role);
+        $this->assertCount(2, $review->report->reviews);
+        $this->assertCount(2, $review->reviewer->reviews);
+        $this->assertNotNull($review->created_at);
+    }
+
+    public function test_forwarding_relationships_link_the_report_and_coordinator(): void
+    {
+        $forwarding = ReportForwarding::factory()->create();
+
+        $this->assertTrue($forwarding->report->forwarding->is($forwarding));
+        $this->assertTrue($forwarding->coordinator->forwardings->first()->is($forwarding));
+        $this->assertSame(UserRole::Koordinator, $forwarding->coordinator->role);
+        $this->assertNotNull($forwarding->forwarded_at);
+        $this->assertNotNull($forwarding->created_at);
+    }
+
+    public function test_database_rejects_a_second_forwarding_for_the_same_report(): void
+    {
+        $forwarding = ReportForwarding::factory()->create();
+
+        $this->expectException(QueryException::class);
+
+        ReportForwarding::factory()->for($forwarding->report)->create();
+    }
+
+    public function test_status_log_records_enum_values_and_actor_relationships(): void
+    {
+        $log = ReportStatusLog::factory()->create();
+
+        $this->assertSame(ReportStatus::Baru, $log->fresh()->from_status);
+        $this->assertSame(ReportStatus::Ditinjau, $log->fresh()->to_status);
+        $this->assertTrue($log->report->statusLogs->first()->is($log));
+        $this->assertTrue($log->changedBy->statusChanges->first()->is($log));
+        $this->assertNotNull($log->created_at);
+    }
+
+    public function test_system_status_log_accepts_a_null_actor(): void
+    {
+        $log = ReportStatusLog::factory()->system()->create();
+
+        $this->assertNull($log->fresh()->changed_by);
+        $this->assertNull($log->fresh()->changedBy);
+        $this->assertTrue($log->report->statusLogs->first()->is($log));
+    }
+
+    public function test_process_records_have_only_creation_timestamps_and_planned_indexes(): void
+    {
+        foreach (['report_reviews', 'report_forwardings', 'report_status_logs'] as $table) {
+            $this->assertTrue(Schema::hasColumn($table, 'created_at'));
+            $this->assertFalse(Schema::hasColumn($table, 'updated_at'));
+        }
+
+        foreach (['report_reviews', 'report_status_logs'] as $table) {
+            $this->assertContains(['report_id', 'created_at'], array_column(Schema::getIndexes($table), 'columns'));
+        }
+    }
+
+    #[DataProvider('invalidForeignKeys')]
+    public function test_unknown_related_records_are_rejected(string $model, string $foreignKey): void
+    {
+        $factory = match ($model) {
+            'report' => Report::factory(),
+            'review' => ReportReview::factory(),
+            'forwarding' => ReportForwarding::factory(),
+            'log' => ReportStatusLog::factory(),
+        };
+
+        $this->expectException(QueryException::class);
+
+        $factory->create([$foreignKey => 999999]);
+    }
+
+    public static function invalidForeignKeys(): array
+    {
+        return [
+            'report area' => ['report', 'area_id'],
+            'review report' => ['review', 'report_id'],
+            'review actor' => ['review', 'reviewer_id'],
+            'forwarding report' => ['forwarding', 'report_id'],
+            'forwarding actor' => ['forwarding', 'coordinator_id'],
+            'log report' => ['log', 'report_id'],
+            'log actor' => ['log', 'changed_by'],
+        ];
+    }
+
+    #[DataProvider('referencedRecords')]
+    public function test_process_records_prevent_deleting_referenced_reports_and_users(string $model, string $relationship): void
+    {
+        $record = match ($model) {
+            'review' => ReportReview::factory()->create(),
+            'forwarding' => ReportForwarding::factory()->create(),
+            'log' => ReportStatusLog::factory()->create(),
+        };
+
+        $this->expectException(QueryException::class);
+
+        $record->{$relationship}->delete();
+    }
+
+    public static function referencedRecords(): array
+    {
+        return [
+            'review keeps report' => ['review', 'report'],
+            'review keeps reviewer' => ['review', 'reviewer'],
+            'forwarding keeps report' => ['forwarding', 'report'],
+            'forwarding keeps coordinator' => ['forwarding', 'coordinator'],
+            'log keeps report' => ['log', 'report'],
+            'log keeps actor' => ['log', 'changedBy'],
+        ];
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['area_id', 'title', 'description', 'occurred_at', 'location_description', 'latitude', 'longitude'])]
 class Report extends Model
@@ -39,5 +41,23 @@ class Report extends Model
     public function area(): BelongsTo
     {
         return $this->belongsTo(Area::class);
+    }
+
+    /** @return HasMany<ReportReview, $this> */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ReportReview::class);
+    }
+
+    /** @return HasOne<ReportForwarding, $this> */
+    public function forwarding(): HasOne
+    {
+        return $this->hasOne(ReportForwarding::class);
+    }
+
+    /** @return HasMany<ReportStatusLog, $this> */
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(ReportStatusLog::class);
     }
 }
