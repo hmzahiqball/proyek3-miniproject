@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\ReportStatus;
 use Database\Factories\ReportFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +31,25 @@ class Report extends Model
             'longitude' => 'decimal:7',
             'evidence_size' => 'integer',
         ];
+    }
+
+    /** @param array<string, mixed> $filters */
+    #[Scope]
+    protected function matchingFilters(Builder $query, array $filters): void
+    {
+        if (isset($filters['q'])) {
+            $term = '%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $filters['q']).'%';
+            $query->where(function (Builder $search) use ($term): void {
+                $search->whereRaw("title LIKE ? ESCAPE '!'", [$term])
+                    ->orWhereRaw("location_description LIKE ? ESCAPE '!'", [$term]);
+            });
+        }
+        if (isset($filters['area_id'])) {
+            $query->where('area_id', $filters['area_id']);
+        }
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
     }
 
     /** @return BelongsTo<User, $this> */

@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Coordinator;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListReportsRequest;
+use App\Models\Area;
 use App\Models\Report;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-    public function index(): View
+    public function index(ListReportsRequest $request): View
     {
         Gate::authorize('coordinateAny', Report::class);
 
         return view('coordinator.reports.index', [
-            'reports' => Report::query()->with('area')->latest('created_at')->latest('id')->paginate(10),
+            'reports' => Report::query()->with('area')->matchingFilters($request->filters())
+                ->latest('created_at')->latest('id')->paginate(10)->appends($request->filters()),
+            'filters' => $request->filters(),
+            'areas' => Area::query()->orderBy('name')->orderBy('id')->get(),
         ]);
     }
 

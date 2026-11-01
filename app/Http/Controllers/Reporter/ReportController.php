@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reporter;
 
 use App\Enums\ReportStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListReportsRequest;
 use App\Http\Requests\StoreReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Area;
@@ -21,13 +22,15 @@ use Throwable;
 
 class ReportController extends Controller
 {
-    public function index(Request $request): View
+    public function index(ListReportsRequest $request): View
     {
         Gate::authorize('viewAny', Report::class);
 
         return view('reporter.reports.index', [
             'reports' => $request->user()->reports()->with('area')
-                ->latest('created_at')->latest('id')->paginate(10),
+                ->matchingFilters($request->filters())->latest('created_at')->latest('id')->paginate(10)->appends($request->filters()),
+            'filters' => $request->filters(),
+            'areas' => Area::query()->orderBy('name')->orderBy('id')->get(),
         ]);
     }
 
