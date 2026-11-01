@@ -18,6 +18,12 @@ class StoreReportRequest extends FormRequest
     /** @return array<string, array<int, mixed>> */
     public function rules(): array
     {
+        return self::reportInputRules();
+    }
+
+    /** @return array<string, array<int, mixed>> */
+    public static function reportInputRules(): array
+    {
         return [
             'title' => ['required', 'string', 'min:5', 'max:150'],
             'description' => ['required', 'string', 'min:20', 'max:5000'],
@@ -53,6 +59,12 @@ class StoreReportRequest extends FormRequest
 
     /** @return array<string, string> */
     public function messages(): array
+    {
+        return self::reportInputMessages();
+    }
+
+    /** @return array<string, string> */
+    public static function reportInputMessages(): array
     {
         return [
             'title.required' => 'Ringkasan kejadian wajib diisi.',
