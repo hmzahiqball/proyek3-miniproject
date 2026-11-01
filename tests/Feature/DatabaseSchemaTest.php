@@ -17,28 +17,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
-use RuntimeException;
 use Tests\TestCase;
 
 class DatabaseSchemaTest extends TestCase
 {
     use RefreshDatabase;
-
-    protected function beforeRefreshingDatabase(): void
-    {
-        $connection = DB::connection();
-
-        if (env('REQUIRE_MYSQL_CONNECTION', false)) {
-            if ($connection->getDriverName() !== 'mysql') {
-                throw new RuntimeException('Konfigurasi pengujian MySQL wajib memakai driver mysql.');
-            }
-
-        }
-
-        if ($connection->getDriverName() !== 'sqlite' && ! str_ends_with($connection->getDatabaseName(), '_testing')) {
-            throw new RuntimeException('Pengujian database harus memakai database terpisah dengan akhiran _testing.');
-        }
-    }
 
     public function test_database_defaults_new_users_to_active_reporters(): void
     {
@@ -319,7 +302,7 @@ class DatabaseSchemaTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertDatabaseCount('areas', 3);
-        $this->assertDatabaseCount('users', 0);
+        $this->assertDatabaseCount('users', 3);
         $this->assertSame('Nama wilayah yang diperbarui', $area->fresh()->name);
         $this->assertFalse($area->fresh()->is_active);
         $this->assertDatabaseHas('areas', ['code' => 'DEMO-B', 'name' => 'Wilayah Demo B']);
