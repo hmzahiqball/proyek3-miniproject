@@ -42,7 +42,7 @@
                         <a href="{{ route('pelapor.reports.create') }}" class="btn btn-primary">Buat laporan</a>
                         <a href="{{ route('pelapor.reports.index') }}" class="btn btn-outline">Laporan saya</a>
                     </div>
-                    <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri saat status mengizinkan. Lampiran bukti, kirim ulang, dan peninjauan akan ditambahkan pada tahap berikutnya.</p>
+                    <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri beserta bukti saat status mengizinkan. Kirim ulang dan peninjauan akan ditambahkan pada tahap berikutnya.</p>
                 @else
                     <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600">Fitur operasional di atas sedang disiapkan dan belum dapat digunakan.</p>
                 @endif
