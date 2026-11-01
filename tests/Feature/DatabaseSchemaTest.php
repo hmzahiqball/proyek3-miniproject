@@ -11,6 +11,7 @@ use App\Models\ReportForwarding;
 use App\Models\ReportReview;
 use App\Models\ReportStatusLog;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,18 @@ class DatabaseSchemaTest extends TestCase
     protected function beforeRefreshingDatabase(): void
     {
         $connection = DB::connection();
+
+        if (env('REQUIRE_MYSQL_SERVER', false)) {
+            if ($connection->getDriverName() !== 'mysql') {
+                throw new RuntimeException('Konfigurasi pengujian MySQL wajib memakai driver mysql.');
+            }
+
+            $version = $connection->selectOne('SELECT VERSION() AS version')->version;
+
+            if (str_contains(strtolower($version), 'mariadb')) {
+                throw new RuntimeException('Pengujian ini memerlukan server MySQL, bukan MariaDB.');
+            }
+        }
 
         if ($connection->getDriverName() !== 'sqlite' && ! str_ends_with($connection->getDatabaseName(), '_testing')) {
             throw new RuntimeException('Pengujian database harus memakai database terpisah dengan akhiran _testing.');
@@ -301,5 +314,20 @@ class DatabaseSchemaTest extends TestCase
             'log keeps report' => ['log', 'report'],
             'log keeps actor' => ['log', 'changedBy'],
         ];
+    }
+
+    public function test_seeders_can_be_repeated_without_duplicates_or_overwriting_existing_areas(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+        $area = Area::where('code', 'DEMO-A')->firstOrFail();
+        $area->update(['name' => 'Nama wilayah yang diperbarui', 'is_active' => false]);
+        $this->seed(DatabaseSeeder::class);
+
+        $this->assertDatabaseCount('areas', 3);
+        $this->assertDatabaseCount('users', 0);
+        $this->assertSame('Nama wilayah yang diperbarui', $area->fresh()->name);
+        $this->assertFalse($area->fresh()->is_active);
+        $this->assertDatabaseHas('areas', ['code' => 'DEMO-B', 'name' => 'Wilayah Demo B']);
+        $this->assertDatabaseHas('areas', ['code' => 'DEMO-C', 'name' => 'Wilayah Demo C']);
     }
 }
