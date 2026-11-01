@@ -34,7 +34,12 @@
                         <li>{{ $responsibility }}</li>
                     @endforeach
                 </ul>
-                <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600">Fitur operasional di atas sedang disiapkan dan belum dapat digunakan.</p>
+                @if(auth()->user()->role === \App\Enums\UserRole::Koordinator)
+                    <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary mt-6">Kelola wilayah</a>
+                    <p class="muted mt-4">Pengelolaan wilayah sudah tersedia. Fitur proses laporan akan ditambahkan pada tahap berikutnya.</p>
+                @else
+                    <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600">Fitur operasional di atas sedang disiapkan dan belum dapat digunakan.</p>
+                @endif
             </section>
         </div>
     </div>

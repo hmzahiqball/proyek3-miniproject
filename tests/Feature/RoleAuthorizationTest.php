@@ -31,6 +31,12 @@ class RoleAuthorizationTest extends TestCase
 
         if ($allowed) {
             $response->assertOk()->assertSee($user->name)->assertSee('Dashboard '.$role->label());
+
+            if ($role === UserRole::Koordinator) {
+                $response->assertSee(route('koordinator.areas.index'));
+            } else {
+                $response->assertDontSee('Kelola wilayah');
+            }
         } else {
             $response->assertForbidden()->assertSee('Akses ditolak');
             $this->getJson(route($route))->assertForbidden()
