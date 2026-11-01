@@ -44,7 +44,8 @@
                     </div>
                     <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri beserta bukti saat status mengizinkan. Kirim ulang dan peninjauan akan ditambahkan pada tahap berikutnya.</p>
                 @else
-                    <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600">Fitur operasional di atas sedang disiapkan dan belum dapat digunakan.</p>
+                    <a href="{{ route('relawan.reports.index') }}" class="btn btn-primary mt-6">Pantau laporan</a>
+                    <p class="muted mt-4">Lihat laporan, bukti, catatan tersimpan, dan laporan terkait. Pencatatan keputusan peninjauan akan tersedia pada tahap berikutnya.</p>
                 @endif
             </section>
         </div>

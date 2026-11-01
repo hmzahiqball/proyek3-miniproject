@@ -14,7 +14,7 @@
                     @endauth
                     <a href="{{ route('guide') }}" class="btn btn-outline">Panduan pelaporan</a>
                 </div>
-                <p class="mt-4 text-xs leading-6 text-slate-500">Pelapor dapat mengirim dan melihat laporan beserta bukti melalui dashboard. Peninjauan dan kirim ulang masih dalam pengembangan.</p>
+                <p class="mt-4 text-xs leading-6 text-slate-500">Pelapor dapat mengirim dan melihat laporan beserta bukti melalui dashboard. Pemantauan Relawan tersedia; keputusan peninjauan dan kirim ulang masih dalam pengembangan.</p>
             </div>
             <aside class="panel" aria-labelledby="preparation-title">
                 <h2 id="preparation-title" class="text-base font-semibold">Informasi yang perlu disiapkan</h2>

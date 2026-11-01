@@ -47,4 +47,3 @@
                 <p class="muted mt-2">Tidak ada bukti yang dilampirkan.</p>
             @endif
         </section>
-
