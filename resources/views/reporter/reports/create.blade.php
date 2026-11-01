@@ -66,6 +66,12 @@
                     <p id="location-help" class="mt-2 text-xs text-slate-500">10–500 karakter. Sebutkan jalan, patokan, atau arah menuju lokasi.</p>
                     @error('location_description') <p id="location-error" class="mt-2 text-sm text-red-700">{{ $message }}</p> @enderror
                 </div>
+                <div>
+                    <button type="button" data-use-gps class="btn btn-outline disabled:cursor-wait disabled:opacity-50" aria-describedby="gps-help gps-status">Gunakan GPS</button>
+                    <p id="gps-help" class="mt-2 text-xs leading-6 text-slate-500">Mengisi koordinat lokasi perangkat setelah Anda memberi izin. Gunakan jika Anda berada di lokasi kejadian; koordinat tetap bisa diisi manual.</p>
+                    <p id="gps-status" data-gps-status role="status" aria-live="polite" aria-atomic="true" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                    <noscript><p class="mt-2 text-sm text-slate-600">Aktifkan JavaScript untuk menggunakan GPS, atau isi koordinat secara manual.</p></noscript>
+                </div>
                 <div class="grid gap-5 sm:grid-cols-2">
                     @foreach(['latitude' => ['Lintang', '-90', '90', '-6.9000000'], 'longitude' => ['Bujur', '-180', '180', '107.6000000']] as $field => [$label, $min, $max, $example])
                         <div class="min-w-0">

@@ -1,3 +1,7 @@
+import { initializeLocationPicker } from './location-picker';
+
+initializeLocationPicker();
+
 const menuButton = document.querySelector('[data-menu-toggle]');
 const mobileMenu = document.querySelector('[data-mobile-menu]');
 
