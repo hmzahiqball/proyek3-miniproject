@@ -8,7 +8,7 @@
                 </p>
                 <div class="mt-6 flex flex-wrap gap-3">
                     @auth
-                        <a href="{{ route('dashboard') }}" class="btn btn-primary">Buka akun saya</a>
+                        <a href="{{ route('dashboard') }}" class="btn btn-primary">Buka dashboard</a>
                     @else
                         <a href="{{ route('access') }}" class="btn btn-primary">Masuk ke akun</a>
                     @endauth

@@ -30,7 +30,7 @@ class RoleAuthorizationTest extends TestCase
         $response = $this->actingAs($user)->get(route($route));
 
         if ($allowed) {
-            $response->assertOk()->assertSee($user->name)->assertSee($role->label());
+            $response->assertOk()->assertSee($user->name)->assertSee('Dashboard '.$role->label());
         } else {
             $response->assertForbidden()->assertSee('Akses ditolak');
             $this->getJson(route($route))->assertForbidden()

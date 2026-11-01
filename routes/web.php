@@ -16,11 +16,35 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    Route::view('/pelapor/dashboard', 'pages.dashboard')
+    Route::view('/pelapor/dashboard', 'pages.dashboard', [
+        'title' => 'Dashboard Pelapor',
+        'responsibilities' => [
+            'Membuat laporan kejadian beserta informasi lokasi.',
+            'Melampirkan satu bukti pendukung jika tersedia.',
+            'Memperbaiki laporan selama status masih mengizinkan.',
+            'Memantau perkembangan laporan milik sendiri.',
+        ],
+    ])
         ->middleware('role:pelapor')->name('pelapor.dashboard');
-    Route::view('/relawan/dashboard', 'pages.dashboard')
+    Route::view('/relawan/dashboard', 'pages.dashboard', [
+        'title' => 'Dashboard Relawan Pemantau',
+        'responsibilities' => [
+            'Meninjau kelengkapan dan kewajaran informasi laporan.',
+            'Melihat laporan terkait pada wilayah yang sama.',
+            'Memberikan catatan perbaikan atau kebutuhan penerusan.',
+            'Memperbarui perkembangan laporan sesuai kewenangan.',
+        ],
+    ])
         ->middleware('role:relawan')->name('relawan.dashboard');
-    Route::view('/koordinator/dashboard', 'pages.dashboard')
+    Route::view('/koordinator/dashboard', 'pages.dashboard', [
+        'title' => 'Dashboard Koordinator Relawan',
+        'responsibilities' => [
+            'Mengelola data wilayah dan kebutuhan akses relawan.',
+            'Mencatat penerusan informasi kepada pihak terkait.',
+            'Mencatat penyelesaian proses setelah penerusan.',
+            'Melihat rekap laporan.',
+        ],
+    ])
         ->middleware('role:koordinator')->name('koordinator.dashboard');
 });
 
