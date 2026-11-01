@@ -162,7 +162,7 @@ class CoordinatorClosureTest extends TestCase
             ->post(route('koordinator.reports.close', $report), ['closure_note' => ['salah']])
             ->assertRedirect(route('koordinator.reports.show', $report))->assertSessionHasErrors('closure_note');
         $this->withCookie(config('session.cookie'), session()->getId())->get(route('koordinator.reports.show', $report))
-            ->assertOk()->assertSee('Laporan belum ditutup.');
+            ->assertOk()->assertSee('Perubahan belum disimpan.');
     }
 
     public static function sourceStatuses(): array

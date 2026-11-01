@@ -9,10 +9,32 @@
         </div>
         @if($errors->any())
             <div role="alert" class="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
-                <p class="font-semibold">Laporan belum ditutup. Periksa catatan penyelesaian.</p>
+                <p class="font-semibold">Perubahan belum disimpan. Periksa isian berikut.</p>
                 <ul class="mt-2 list-disc pl-5">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
             </div>
         @endif
+        @can('forward', $report)
+            <form method="POST" action="{{ route('koordinator.reports.forward', $report) }}" class="panel mb-6 space-y-4">
+                @csrf
+                <h2 class="text-lg font-semibold">Catat penerusan informasi</h2>
+                <p class="muted">Isi setelah informasi diteruskan kepada pihak terkait. Catatan hanya dapat disimpan sekali per laporan.</p>
+                <div>
+                    <label for="recipient" class="block text-sm font-medium">Tujuan penerusan</label>
+                    <input id="recipient" name="recipient" type="text" required maxlength="150" value="{{ is_string(old('recipient')) ? old('recipient') : '' }}" class="field mt-2" placeholder="Nama instansi atau posko tujuan" @error('recipient') aria-invalid="true" @enderror>
+                </div>
+                <div>
+                    <label for="forwarded_at" class="block text-sm font-medium">Waktu penerusan (WIB)</label>
+                    <input id="forwarded_at" name="forwarded_at" type="datetime-local" step="1" required min="{{ $report->created_at->timezone('Asia/Jakarta')->format('Y-m-d\TH:i:s') }}" value="{{ is_string(old('forwarded_at')) ? old('forwarded_at') : now('Asia/Jakarta')->format('Y-m-d\TH:i:s') }}" class="field mt-2" aria-describedby="forwarded-time-help" @error('forwarded_at') aria-invalid="true" @enderror>
+                    <p id="forwarded-time-help" class="mt-2 text-xs leading-6 text-slate-500">Tidak boleh sebelum laporan dibuat atau melebihi waktu saat ini. Laporan dibuat {{ $report->created_at->timezone('Asia/Jakarta')->format('d/m/Y H:i:s') }} WIB.</p>
+                </div>
+                <div>
+                    <label for="forwarding_note" class="block text-sm font-medium">Catatan penerusan</label>
+                    <textarea id="forwarding_note" name="note" rows="4" required minlength="10" maxlength="2000" class="field mt-2 h-auto py-3" aria-describedby="forwarding-help" @error('note') aria-invalid="true" @enderror>{{ is_string(old('note')) ? old('note') : '' }}</textarea>
+                    <p id="forwarding-help" class="mt-2 text-xs leading-6 text-slate-500">10–2.000 karakter. Jelaskan informasi yang diteruskan dan cara penyampaiannya.</p>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan penerusan</button>
+            </form>
+        @endcan
         @can('closeForwarded', $report)
             <form method="POST" action="{{ route('koordinator.reports.close', $report) }}" class="panel mb-6 space-y-4">
                 @csrf

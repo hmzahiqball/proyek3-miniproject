@@ -39,7 +39,7 @@
                         <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary">Kelola wilayah</a>
                         <a href="{{ route('koordinator.reports.index') }}" class="btn btn-outline">Koordinasi laporan</a>
                     </div>
-                    <p class="muted mt-4">Lihat laporan dan tutup proses setelah penerusan tercatat. Pencatatan penerusan informasi akan tersedia pada tahap berikutnya.</p>
+                    <p class="muted mt-4">Catat tujuan, waktu, dan catatan penerusan pada laporan yang perlu diteruskan. Setelah itu, tutup proses dengan catatan penyelesaian.</p>
                 @elseif(auth()->user()->role === \App\Enums\UserRole::Pelapor)
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a href="{{ route('pelapor.reports.create') }}" class="btn btn-primary">Buat laporan</a>
