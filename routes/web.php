@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Coordinator\AreaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Reporter\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
@@ -16,6 +17,11 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    Route::middleware('role:pelapor')->prefix('pelapor')->name('pelapor.')->group(function (): void {
+        Route::get('/laporan/buat', [ReportController::class, 'create'])->name('reports.create');
+        Route::post('/laporan', [ReportController::class, 'store'])->name('reports.store');
+    });
 
     Route::middleware('role:koordinator')->prefix('koordinator')->name('koordinator.')->group(function (): void {
         Route::resource('wilayah', AreaController::class)
