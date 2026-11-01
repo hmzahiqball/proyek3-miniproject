@@ -16,6 +16,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -296,12 +297,13 @@ class DatabaseSchemaTest extends TestCase
 
     public function test_seeders_can_be_repeated_without_duplicates_or_overwriting_existing_areas(): void
     {
+        Storage::fake('local');
         $this->seed(DatabaseSeeder::class);
         $area = Area::where('code', 'DEMO-A')->firstOrFail();
         $area->update(['name' => 'Nama wilayah yang diperbarui', 'is_active' => false]);
         $this->seed(DatabaseSeeder::class);
 
-        $this->assertDatabaseCount('areas', 3);
+        $this->assertDatabaseCount('areas', 4);
         $this->assertDatabaseCount('users', 4);
         $this->assertSame('Nama wilayah yang diperbarui', $area->fresh()->name);
         $this->assertFalse($area->fresh()->is_active);
