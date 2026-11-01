@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\Reporter\ReportController;
 use App\Http\Controllers\Reporter\ResubmissionController;
+use App\Http\Controllers\ReportRecapController;
 use App\Http\Controllers\Volunteer\ReportController as VolunteerReportController;
 use App\Http\Controllers\Volunteer\ReviewController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/rekap', ReportRecapController::class)->middleware('role:relawan,koordinator')->name('reports.recap');
     Route::get('/wilayah/{area}/ringkasan', AreaSummaryController::class)->whereNumber('area')
         ->middleware('role:pelapor,relawan,koordinator')->name('areas.summary');
     Route::get('/laporan/{report}/bukti', EvidenceController::class)->whereNumber('report')->name('reports.evidence');

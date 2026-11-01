@@ -84,6 +84,11 @@ class ReportPolicy
             : Response::denyWithStatus(409, 'Kirim ulang hanya tersedia pada status Perlu Perbaikan.');
     }
 
+    public function recapAny(User $user): bool
+    {
+        return $user->is_active && in_array($user->role, [UserRole::Relawan, UserRole::Koordinator], true);
+    }
+
     public function coordinateAny(User $user): bool
     {
         return $user->is_active && $user->role === UserRole::Koordinator;
