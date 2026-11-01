@@ -34,8 +34,10 @@ class RoleAuthorizationTest extends TestCase
 
             if ($role === UserRole::Koordinator) {
                 $response->assertSee(route('koordinator.areas.index'));
+                $response->assertSee(route('koordinator.reports.index'));
             } else {
                 $response->assertDontSee('Kelola wilayah');
+                $response->assertDontSee(route('koordinator.reports.index'));
             }
 
             if ($role === UserRole::Pelapor) {

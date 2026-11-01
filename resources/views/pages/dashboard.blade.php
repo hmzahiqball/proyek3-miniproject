@@ -35,17 +35,20 @@
                     @endforeach
                 </ul>
                 @if(auth()->user()->role === \App\Enums\UserRole::Koordinator)
-                    <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary mt-6">Kelola wilayah</a>
-                    <p class="muted mt-4">Pengelolaan wilayah sudah tersedia. Fitur proses laporan akan ditambahkan pada tahap berikutnya.</p>
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <a href="{{ route('koordinator.areas.index') }}" class="btn btn-primary">Kelola wilayah</a>
+                        <a href="{{ route('koordinator.reports.index') }}" class="btn btn-outline">Koordinasi laporan</a>
+                    </div>
+                    <p class="muted mt-4">Lihat laporan dan tutup proses setelah penerusan tercatat. Pencatatan penerusan informasi akan tersedia pada tahap berikutnya.</p>
                 @elseif(auth()->user()->role === \App\Enums\UserRole::Pelapor)
                     <div class="mt-6 flex flex-wrap gap-3">
                         <a href="{{ route('pelapor.reports.create') }}" class="btn btn-primary">Buat laporan</a>
                         <a href="{{ route('pelapor.reports.index') }}" class="btn btn-outline">Laporan saya</a>
                     </div>
-                    <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri beserta bukti saat status mengizinkan. Kirim ulang dan peninjauan akan ditambahkan pada tahap berikutnya.</p>
+                    <p class="muted mt-4">Anda dapat mengirim, melihat, dan memperbaiki laporan sendiri beserta bukti saat status mengizinkan. Kirim ulang tersedia setelah laporan diminta diperbaiki.</p>
                 @else
                     <a href="{{ route('relawan.reports.index') }}" class="btn btn-primary mt-6">Pantau laporan</a>
-                    <p class="muted mt-4">Lihat laporan, bukti, catatan tersimpan, dan laporan terkait. Pencatatan keputusan peninjauan akan tersedia pada tahap berikutnya.</p>
+                    <p class="muted mt-4">Mulai peninjauan, beri keputusan beserta catatan, dan lihat laporan terkait. Setiap tindakan mengikuti status laporan.</p>
                 @endif
             </section>
         </div>
