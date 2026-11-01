@@ -10,10 +10,14 @@ use App\Models\Area;
 use App\Models\Report;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Throwable;
 
 class ReportController extends Controller
 {
@@ -57,43 +61,93 @@ class ReportController extends Controller
 
     public function update(UpdateReportRequest $request, string $report): RedirectResponse
     {
-        DB::transaction(function () use ($request, $report): void {
-            $report = $request->user()->reports()->lockForUpdate()->findOrFail($report);
-            Gate::authorize('update', $report);
-            $area = Area::query()->lockForUpdate()->find($request->validated('area_id'));
+        $newPath = null;
+        $oldPath = null;
+        try {
+            DB::transaction(function () use ($request, $report, &$newPath, &$oldPath): void {
+                $report = $request->user()->reports()->lockForUpdate()->findOrFail($report);
+                Gate::authorize('update', $report);
+                $area = Area::query()->lockForUpdate()->find($request->validated('area_id'));
 
-            if (! $area || (! $area->is_active && $area->id !== $report->area_id)) {
-                throw ValidationException::withMessages([
-                    'area_id' => 'Wilayah pengganti harus aktif. Wilayah lama yang nonaktif boleh dipertahankan.',
-                ]);
-            }
+                if (! $area || (! $area->is_active && $area->id !== $report->area_id)) {
+                    throw ValidationException::withMessages([
+                        'area_id' => 'Wilayah pengganti harus aktif. Wilayah lama yang nonaktif boleh dipertahankan.',
+                    ]);
+                }
 
-            $report->fill($request->validated());
-            $report->occurred_at = $request->occurredAtUtc();
-            $report->save();
-        });
+                $report->fill($request->safe()->except('evidence'));
+                $report->occurred_at = $request->occurredAtUtc();
+                if ($request->hasFile('evidence')) {
+                    $oldPath = $report->evidence_path;
+                    $this->storeEvidence($report, $request->file('evidence'), $newPath);
+                }
+                $report->save();
+            });
+        } catch (Throwable $exception) {
+            $this->deleteEvidenceSafely($newPath);
+            throw $exception;
+        }
+        $this->deleteEvidenceSafely($oldPath);
 
         return to_route('pelapor.reports.show', $report)->with('status', 'Perbaikan laporan berhasil disimpan. Status laporan tetap.');
     }
 
     public function store(StoreReportRequest $request): RedirectResponse
     {
-        DB::transaction(function () use ($request): void {
-            $area = Area::query()->lockForUpdate()->find($request->validated('area_id'));
+        $newPath = null;
+        try {
+            DB::transaction(function () use ($request, &$newPath): void {
+                $area = Area::query()->lockForUpdate()->find($request->validated('area_id'));
 
-            if (! $area?->is_active) {
-                throw ValidationException::withMessages([
-                    'area_id' => 'Wilayah tidak tersedia atau sudah nonaktif. Pilih wilayah aktif.',
-                ]);
-            }
+                if (! $area?->is_active) {
+                    throw ValidationException::withMessages([
+                        'area_id' => 'Wilayah tidak tersedia atau sudah nonaktif. Pilih wilayah aktif.',
+                    ]);
+                }
 
-            $report = new Report($request->validated());
-            $report->occurred_at = $request->occurredAtUtc();
-            $report->reporter()->associate($request->user());
-            $report->status = ReportStatus::Baru;
-            $report->save();
-        });
+                $report = new Report($request->safe()->except('evidence'));
+                $report->occurred_at = $request->occurredAtUtc();
+                $report->reporter()->associate($request->user());
+                $report->status = ReportStatus::Baru;
+                $this->storeEvidence($report, $request->file('evidence'), $newPath);
+                $report->save();
+            });
+        } catch (Throwable $exception) {
+            $this->deleteEvidenceSafely($newPath);
+            throw $exception;
+        }
 
         return to_route('pelapor.dashboard')->with('status', 'Laporan berhasil dikirim dengan status Baru.');
+    }
+
+    private function storeEvidence(Report $report, ?UploadedFile $file, ?string &$newPath): void
+    {
+        if (! $file) {
+            return;
+        }
+
+        $newPath = 'report-evidence/'.$file->hashName();
+        if (! $file->storeAs('report-evidence', $file->hashName(), 'local')) {
+            throw ValidationException::withMessages(['evidence' => 'Bukti gagal disimpan. Silakan pilih file dan coba lagi.']);
+        }
+
+        $report->evidence_path = $newPath;
+        $report->evidence_mime = $file->getMimeType();
+        $report->evidence_size = $file->getSize();
+    }
+
+    private function deleteEvidenceSafely(?string $path): void
+    {
+        if (! $path) {
+            return;
+        }
+
+        try {
+            if (! Storage::disk('local')->delete($path)) {
+                Log::warning('File bukti gagal dibersihkan.', ['path' => $path]);
+            }
+        } catch (Throwable $exception) {
+            Log::warning('File bukti gagal dibersihkan.', ['path' => $path, 'exception' => $exception]);
+        }
     }
 }

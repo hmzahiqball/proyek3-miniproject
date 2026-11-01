@@ -53,6 +53,15 @@
                 </dl>
             </section>
         </div>
+        <section class="panel mt-6" aria-labelledby="evidence-title">
+            <h2 id="evidence-title" class="text-lg font-semibold">Bukti pendukung</h2>
+            @if($report->evidence_path)
+                <p class="muted mt-2">{{ $report->evidence_mime === 'application/pdf' ? 'Dokumen PDF' : 'Gambar' }} · {{ number_format($report->evidence_size / 1024, 1, ',', '.') }} KB</p>
+                <a href="{{ route('reports.evidence', $report) }}" class="btn btn-outline mt-4">Unduh bukti</a>
+            @else
+                <p class="muted mt-2">Tidak ada bukti yang dilampirkan.</p>
+            @endif
+        </section>
         <p class="muted mt-6">Status menunjukkan proses dalam aplikasi. Status selesai bukan pernyataan bahwa api telah padam.</p>
     </div>
 </x-layouts.public>

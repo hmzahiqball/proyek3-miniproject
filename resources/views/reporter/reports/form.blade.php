@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ $report->exists ? route('pelapor.reports.update', $report) : route('pelapor.reports.store') }}" class="panel max-w-3xl space-y-8">
+        <form method="POST" enctype="multipart/form-data" action="{{ $report->exists ? route('pelapor.reports.update', $report) : route('pelapor.reports.store') }}" class="panel max-w-3xl space-y-8">
             @csrf
             @if($report->exists)
                 @method('PATCH')
@@ -92,8 +92,19 @@
                 </div>
             </fieldset>
 
+            <fieldset class="min-w-0 border-t border-slate-200 pt-6">
+                <legend class="pr-3 text-lg font-semibold">Bukti pendukung</legend>
+                @if($report->evidence_path)
+                    <p class="muted mb-4">Bukti saat ini tersedia. <a href="{{ route('reports.evidence', $report) }}" class="text-forest-900 underline">Unduh bukti</a>. Kosongkan pilihan file untuk mempertahankannya.</p>
+                @endif
+                <label for="evidence" class="block text-sm font-medium">{{ $report->evidence_path ? 'Ganti bukti (opsional)' : 'Lampiran bukti (opsional)' }}</label>
+                <input type="file" id="evidence" name="evidence" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" class="mt-3 block w-full min-w-0 rounded-md border border-slate-300 p-3 text-sm file:mr-3 file:rounded file:border-0 file:bg-forest-100 file:px-3 file:py-2 file:text-forest-900" aria-describedby="evidence-help{{ $errors->has('evidence') ? ' evidence-error' : '' }}" @error('evidence') aria-invalid="true" @enderror>
+                <p id="evidence-help" class="mt-2 text-xs leading-6 text-slate-500">Satu file JPG/JPEG, PNG, atau PDF, maksimal 2 MB. Bukti hanya dapat diakses pemilik laporan dan petugas yang berwenang. Jika form gagal disimpan, pilih kembali file sebelum mencoba lagi.</p>
+                @error('evidence') <p id="evidence-error" class="mt-2 text-sm text-red-700">{{ $message }}</p> @enderror
+            </fieldset>
+
             <div class="border-t border-slate-200 pt-6">
-                <p class="muted mb-4">Semua isian wajib dilengkapi. Periksa kembali waktu dan lokasi sebelum menyimpan.</p>
+                <p class="muted mb-4">Lengkapi informasi kejadian dan lokasi. Lampiran bukti boleh dikosongkan.</p>
                 <div class="flex flex-wrap gap-3">
                     <button type="submit" class="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50" @disabled($areas->isEmpty())>{{ $report->exists ? 'Simpan perbaikan' : 'Kirim laporan' }}</button>
                     <a href="{{ $report->exists ? route('pelapor.reports.show', $report) : route('pelapor.dashboard') }}" class="btn btn-outline">Batal</a>

@@ -32,4 +32,12 @@ class ReportPolicy
             ? Response::allow()
             : Response::denyWithStatus(409, 'Laporan hanya dapat diperbaiki pada status Baru atau Perlu Perbaikan. Muat ulang detail laporan untuk melihat status terkini.');
     }
+
+    public function downloadEvidence(User $user, Report $report): Response
+    {
+        return $user->is_active && (
+            in_array($user->role, [UserRole::Relawan, UserRole::Koordinator], true)
+            || $this->view($user, $report)->allowed()
+        ) ? Response::allow() : Response::denyAsNotFound();
+    }
 }

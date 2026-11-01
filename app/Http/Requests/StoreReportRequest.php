@@ -26,6 +26,7 @@ class StoreReportRequest extends FormRequest
             'location_description' => ['required', 'string', 'min:10', 'max:500'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'evidence' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'mimetypes:image/jpeg,image/png,application/pdf', 'extensions:jpg,jpeg,png,pdf', 'max:2048'],
         ];
     }
 
@@ -77,6 +78,12 @@ class StoreReportRequest extends FormRequest
             'longitude.required' => 'Bujur wajib diisi.',
             'longitude.numeric' => 'Bujur harus berupa angka dengan titik sebagai pemisah desimal.',
             'longitude.between' => 'Bujur harus berada antara -180 dan 180.',
+            'evidence.file' => 'Bukti harus berupa satu file.',
+            'evidence.uploaded' => 'Bukti gagal diunggah. Pastikan ukurannya maksimal 2 MB.',
+            'evidence.mimes' => 'Bukti hanya boleh berupa JPG/JPEG, PNG, atau PDF yang valid.',
+            'evidence.mimetypes' => 'Isi bukti harus berupa gambar JPEG/PNG atau dokumen PDF.',
+            'evidence.extensions' => 'Ekstensi bukti harus JPG, JPEG, PNG, atau PDF.',
+            'evidence.max' => 'Ukuran bukti maksimal 2 MB (2.048 KB).',
         ];
     }
 }
