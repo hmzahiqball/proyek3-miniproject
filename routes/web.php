@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Coordinator\AreaController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,11 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+    Route::middleware('role:koordinator')->prefix('koordinator')->name('koordinator.')->group(function (): void {
+        Route::resource('wilayah', AreaController::class)
+            ->parameters(['wilayah' => 'area'])->names('areas')->except('show');
+    });
 
     Route::view('/pelapor/dashboard', 'pages.dashboard', [
         'title' => 'Dashboard Pelapor',
