@@ -10,4 +10,16 @@ enum ReportStatus: string
     case PerluDiteruskan = 'perlu_diteruskan';
     case Diteruskan = 'diteruskan';
     case Selesai = 'selesai';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Baru => 'Baru',
+            self::Ditinjau => 'Ditinjau',
+            self::PerluPerbaikan => 'Perlu perbaikan',
+            self::PerluDiteruskan => 'Perlu diteruskan',
+            self::Diteruskan => 'Diteruskan',
+            self::Selesai => 'Selesai',
+        };
+    }
 }
