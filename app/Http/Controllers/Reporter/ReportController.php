@@ -36,7 +36,10 @@ class ReportController extends Controller
         $report = $request->user()->reports()->with('area')->findOrFail($report);
         Gate::authorize('view', $report);
 
-        return view('reporter.reports.show', compact('report'));
+        return view('reporter.reports.show', [
+            'report' => $report,
+            'reviews' => $report->reviews()->with('reviewer:id,name')->latest('created_at')->latest('id')->paginate(10, ['*'], 'catatan'),
+        ]);
     }
 
     public function create(): View

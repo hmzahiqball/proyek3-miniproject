@@ -10,6 +10,16 @@ use Illuminate\Auth\Access\Response;
 
 class ReportPolicy
 {
+    public function monitorAny(User $user): bool
+    {
+        return $user->is_active && $user->role === UserRole::Relawan;
+    }
+
+    public function monitor(User $user, Report $report): bool
+    {
+        return $this->monitorAny($user);
+    }
+
     public function viewAny(User $user): bool
     {
         return $user->is_active && $user->role === UserRole::Pelapor;

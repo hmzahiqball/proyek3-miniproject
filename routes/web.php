@@ -5,6 +5,7 @@ use App\Http\Controllers\Coordinator\AreaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\Reporter\ReportController;
+use App\Http\Controllers\Volunteer\ReportController as VolunteerReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
@@ -19,6 +20,11 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware(['auth', 'active'])->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/laporan/{report}/bukti', EvidenceController::class)->whereNumber('report')->name('reports.evidence');
+
+    Route::middleware('role:relawan')->prefix('relawan')->name('relawan.')->group(function (): void {
+        Route::get('/laporan', [VolunteerReportController::class, 'index'])->name('reports.index');
+        Route::get('/laporan/{report}', [VolunteerReportController::class, 'show'])->whereNumber('report')->name('reports.show');
+    });
 
     Route::middleware('role:pelapor')->prefix('pelapor')->name('pelapor.')->group(function (): void {
         Route::get('/laporan', [ReportController::class, 'index'])->name('reports.index');
