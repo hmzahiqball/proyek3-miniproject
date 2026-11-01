@@ -183,6 +183,17 @@ class ReportSubmissionTest extends TestCase
         $this->assertDatabaseCount('reports', 0);
     }
 
+    public function test_html_form_can_redisplay_errors_when_fields_contain_arrays(): void
+    {
+        $input = array_fill_keys(array_keys($this->validInput(Area::factory()->create())), ['invalid']);
+        $this->actingAs(User::factory()->create())->from(route('pelapor.reports.create'))
+            ->post(route('pelapor.reports.store'), $input)->assertRedirect(route('pelapor.reports.create'))
+            ->assertSessionHasErrors(array_keys($input));
+        $this->withCookie(config('session.cookie'), session()->getId())->get(route('pelapor.reports.create'))
+            ->assertOk()->assertSee('Laporan belum terkirim.')->assertSee('Ringkasan kejadian harus berupa teks.');
+        $this->assertDatabaseCount('reports', 0);
+    }
+
     /** @return array<string, mixed> */
     private function validInput(Area $area): array
     {
