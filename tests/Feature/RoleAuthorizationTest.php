@@ -40,8 +40,10 @@ class RoleAuthorizationTest extends TestCase
 
             if ($role === UserRole::Pelapor) {
                 $response->assertSee(route('pelapor.reports.create'));
+                $response->assertSee(route('pelapor.reports.index'));
             } else {
                 $response->assertDontSee(route('pelapor.reports.create'));
+                $response->assertDontSee(route('pelapor.reports.index'));
             }
         } else {
             $response->assertForbidden()->assertSee('Akses ditolak');

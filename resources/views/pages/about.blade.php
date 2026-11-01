@@ -34,7 +34,7 @@
                 <li>Pihak terkait merupakan pihak eksternal dan tidak wajib memiliki akun aplikasi.</li>
                 <li>Aplikasi ini tidak menjalankan operasi pemadaman atau layanan tanggap darurat.</li>
             </ul>
-            <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600"><strong class="text-slate-700">Status pengembangan:</strong> halaman publik, login/logout, dashboard per peran, pengelolaan wilayah, dan pengiriman laporan sudah tersedia. Daftar/detail laporan, lampiran bukti, peninjauan, dan rekap masih dalam pengembangan.</p>
+            <p class="mt-6 rounded-md bg-slate-50 p-4 text-sm leading-7 text-slate-600"><strong class="text-slate-700">Status pengembangan:</strong> halaman publik, login/logout, dashboard per peran, pengelolaan wilayah, pengiriman laporan, serta daftar/detail laporan milik sendiri sudah tersedia. Perbaikan laporan, lampiran bukti, peninjauan, dan rekap masih dalam pengembangan.</p>
         </section>
     </div>
 </x-layouts.public>
